@@ -1,0 +1,414 @@
+<mxfile host="app.diagrams.net" modified="2026-07-06T00:00:00.000Z" agent="5.0" etag="" version="24.0.0" type="device">
+  <diagram id="use-case" name="Диаграмма вариантов использования">
+    <mxGraphModel dx="2200" dy="1800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ==================== SYSTEM BOUNDARY ==================== -->
+        <mxCell id="sys" value="SoleMareHotel — Система управления отелем" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#002B5B;fontSize=16;fontStyle=1;verticalAlign=top;dashed=1;dashPattern=8 4;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="350" y="40" width="1500" height="1500" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ACTORS (LEFT) ==================== -->
+
+        <!-- Anonymous -->
+        <mxCell id="a_anon" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;outlineConnect=0;fontSize=12;fontStyle=1;container=0;collapsible=0;recursiveResize=0;fillColor=#F5F5F5;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="80" y="300" width="70" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="a_anon_label" value="Anonymous&#xa;(Незарегистрированный&#xa;пользователь)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="55" y="445" width="120" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Guest -->
+        <mxCell id="a_guest" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;outlineConnect=0;fontSize=12;fontStyle=1;container=0;collapsible=0;recursiveResize=0;fillColor=#E6F7F0;strokeColor=#27ae60;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1050" width="70" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="a_guest_label" value="Guest&#xa;(Гость)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="72" y="1195" width="85" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== ACTORS (RIGHT) ==================== -->
+
+        <!-- Receptionist -->
+        <mxCell id="a_recep" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;outlineConnect=0;fontSize=12;fontStyle=1;container=0;collapsible=0;recursiveResize=0;fillColor=#E8EEF5;strokeColor=#002B5B;" vertex="1" parent="1">
+          <mxGeometry x="1980" y="250" width="70" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="a_recep_label" value="Receptionist&#xa;(Ресепшен)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1960" y="395" width="110" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Housekeeper -->
+        <mxCell id="a_house" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;outlineConnect=0;fontSize=12;fontStyle=1;container=0;collapsible=0;recursiveResize=0;fillColor=#FFF9E7;strokeColor=#b8860b;" vertex="1" parent="1">
+          <mxGeometry x="1980" y="1050" width="70" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="a_house_label" value="Housekeeper&#xa;(Горничная)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1957" y="1195" width="115" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Admin -->
+        <mxCell id="a_admin" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;outlineConnect=0;fontSize=12;fontStyle=1;container=0;collapsible=0;recursiveResize=0;fillColor=#FDE8E8;strokeColor=#c0392b;" vertex="1" parent="1">
+          <mxGeometry x="1980" y="1350" width="70" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="a_admin_label" value="Admin&#xa;(Администратор)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1953" y="1495" width="125" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PACKAGE 1: АВТОРИЗАЦИЯ ==================== -->
+        <mxCell id="pkg_auth" value="Авторизация" style="swimlane;startSize=25;fillColor=#FDFBF7;strokeColor=#C5A059;fontStyle=1;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="380" y="60" width="320" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_login" value="Вход в систему" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_auth">
+          <mxGeometry x="55" y="40" width="140" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_register" value="Регистрация" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_auth">
+          <mxGeometry x="55" y="100" width="140" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_profile" value="Просмотр/редактирование&#xa;профиля" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_auth">
+          <mxGeometry x="55" y="155" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PACKAGE 2: КАТАЛОГ ==================== -->
+        <mxCell id="pkg_catalog" value="Каталог номеров" style="swimlane;startSize=25;fillColor=#FDFBF7;strokeColor=#C5A059;fontStyle=1;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="380" y="290" width="320" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_catalog" value="Просмотр каталога номеров&#xa;(с фильтрами)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_catalog">
+          <mxGeometry x="40" y="35" width="180" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_room_details" value="Просмотр деталей номера" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_catalog">
+          <mxGeometry x="40" y="85" width="170" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PACKAGE 3: БРОНИРОВАНИЕ ==================== -->
+        <mxCell id="pkg_booking" value="Бронирование" style="swimlane;startSize=25;fillColor=#FDFBF7;strokeColor=#C5A059;fontStyle=1;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="750" y="60" width="350" height="500" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_submit_request" value="Подача заявки&#xa;на бронирование" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_booking">
+          <mxGeometry x="90" y="35" width="170" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_my_requests" value="Просмотр моих заявок" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_booking">
+          <mxGeometry x="90" y="95" width="170" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_cancel_request" value="Отмена заявки" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_booking">
+          <mxGeometry x="90" y="145" width="140" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_approve_request" value="Обработка заявок&#xa;(одобрение/отклонение)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_booking">
+          <mxGeometry x="75" y="200" width="195" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_bookings" value="Управление бронями&#xa;(просмотр, создание,&#xa;редактирование, удаление)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_booking">
+          <mxGeometry x="65" y="270" width="215" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_checkin" value="Заселение гостя" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_booking">
+          <mxGeometry x="90" y="350" width="150" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_checkout" value="Выселение гостя" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_booking">
+          <mxGeometry x="90" y="405" width="150" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_my_bookings" value="Мои брони / отмена брони" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_booking">
+          <mxGeometry x="75" y="460" width="195" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PACKAGE 4: УПРАВЛЕНИЕ ==================== -->
+        <mxCell id="pkg_mgmt" value="Управление данными" style="swimlane;startSize=25;fillColor=#FDFBF7;strokeColor=#C5A059;fontStyle=1;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="60" width="320" height="560" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_guests" value="Управление гостями&#xa;(CRUD, аннулирование)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_mgmt">
+          <mxGeometry x="60" y="35" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_rooms" value="Управление номерами&#xa;(CRUD, списание)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_mgmt">
+          <mxGeometry x="60" y="100" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_categories" value="Управление категориями&#xa;номеров" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_mgmt">
+          <mxGeometry x="60" y="165" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_services" value="Управление услугами&#xa;и заказами услуг" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_mgmt">
+          <mxGeometry x="60" y="225" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_orgs" value="Управление&#xa;организациями" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_mgmt">
+          <mxGeometry x="70" y="285" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_staff" value="Управление&#xa;персоналом (CRUD)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_mgmt">
+          <mxGeometry x="70" y="345" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_restore_room" value="Восстановление номера&#xa;из ремонта" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_mgmt">
+          <mxGeometry x="65" y="405" width="190" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_export_data" value="Экспорт данных&#xa;(Excel, Word)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_mgmt">
+          <mxGeometry x="70" y="465" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_calendar" value="Календарь доступности" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_mgmt">
+          <mxGeometry x="65" y="520" width="190" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PACKAGE 5: ФИНАНСЫ ==================== -->
+        <mxCell id="pkg_finance" value="Финансы" style="swimlane;startSize=25;fillColor=#FDFBF7;strokeColor=#C5A059;fontStyle=1;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="650" width="320" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_payments" value="Управление платежами&#xa;(приём, удаление)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_finance">
+          <mxGeometry x="60" y="35" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_acts" value="Управление актами&#xa;(создание, просмотр, экспорт)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_finance">
+          <mxGeometry x="45" y="90" width="230" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PACKAGE 6: УБОРКА ==================== -->
+        <mxCell id="pkg_clean" value="Уборка и инвентарь" style="swimlane;startSize=25;fillColor=#FDFBF7;strokeColor=#C5A059;fontStyle=1;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="750" y="600" width="350" height="500" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_my_tasks" value="Просмотр моих заданий" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_clean">
+          <mxGeometry x="80" y="35" width="185" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_start_task" value="Начало задания на уборку" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_clean">
+          <mxGeometry x="80" y="85" width="185" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_complete_task" value="Завершение задания&#xa;(с отчётом и фото)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_clean">
+          <mxGeometry x="75" y="135" width="195" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_inventory" value="Просмотр/заполнение&#xa;описи номера" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_clean">
+          <mxGeometry x="75" y="195" width="195" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_manage_tasks" value="Управление заданиями&#xa;(создание, назначение)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_clean">
+          <mxGeometry x="70" y="260" width="205" height="45" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_schedule" value="Расписание уборки&#xa;(промежуточной)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_clean">
+          <mxGeometry x="75" y="325" width="195" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_journal" value="Журнал уборки" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_clean">
+          <mxGeometry x="95" y="380" width="155" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_clean_reports" value="Отчёты и статистика&#xa;уборки" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_clean">
+          <mxGeometry x="80" y="430" width="185" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== PACKAGE 7: ОТЧЁТЫ ==================== -->
+        <mxCell id="pkg_reports" value="Аналитика и отчёты" style="swimlane;startSize=25;fillColor=#FDFBF7;strokeColor=#C5A059;fontStyle=1;fontSize=12;rounded=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="820" width="320" height="320" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_reports_dashboard" value="Панель отчётов" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_reports">
+          <mxGeometry x="80" y="35" width="155" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_revenue" value="Отчёт по выручке" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_reports">
+          <mxGeometry x="80" y="80" width="155" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_occupancy" value="Отчёт по загрузке" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_reports">
+          <mxGeometry x="80" y="125" width="155" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_overdue" value="Просроченные гости" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_reports">
+          <mxGeometry x="80" y="170" width="155" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_popularity" value="Популярность категорий" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_reports">
+          <mxGeometry x="70" y="215" width="175" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="uc_act_log" value="Журнал активности" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#333;fontSize=11;" vertex="1" parent="pkg_reports">
+          <mxGeometry x="80" y="265" width="155" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CONNECTIONS: ANONYMOUS ==================== -->
+        <mxCell id="e_anon_login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#666;strokeWidth=1;" edge="1" source="a_anon" target="uc_login" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_anon_register" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#666;strokeWidth=1;" edge="1" source="a_anon" target="uc_register" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_anon_catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#666;strokeWidth=1;" edge="1" source="a_anon" target="uc_catalog" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_anon_details" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#666;strokeWidth=1;" edge="1" source="a_anon" target="uc_room_details" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CONNECTIONS: GUEST ==================== -->
+        <mxCell id="e_guest_profile" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#27ae60;strokeWidth=1;" edge="1" source="a_guest" target="uc_profile" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_guest_catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#27ae60;strokeWidth=1;" edge="1" source="a_guest" target="uc_catalog" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_guest_submit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#27ae60;strokeWidth=1;" edge="1" source="a_guest" target="uc_submit_request" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_guest_myreq" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#27ae60;strokeWidth=1;" edge="1" source="a_guest" target="uc_my_requests" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_guest_cancel_req" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#27ae60;strokeWidth=1;" edge="1" source="a_guest" target="uc_cancel_request" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_guest_mybook" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#27ae60;strokeWidth=1;" edge="1" source="a_guest" target="uc_my_bookings" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CONNECTIONS: RECEPTIONIST ==================== -->
+        <mxCell id="e_recep_approve" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_approve_request" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_bookings" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_manage_bookings" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_checkin" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_checkin" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_checkout" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_checkout" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_guests" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_manage_guests" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_rooms" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_manage_rooms" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_cats" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_manage_categories" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_services" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_manage_services" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_orgs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_manage_orgs" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_payments" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_manage_payments" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_acts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_manage_acts" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_calendar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_calendar" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_tasks" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_manage_tasks" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_inventory" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_inventory" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_recep_export" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#002B5B;strokeWidth=1;" edge="1" source="a_recep" target="uc_export_data" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CONNECTIONS: HOUSEKEEPER ==================== -->
+        <mxCell id="e_house_mytask" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#b8860b;strokeWidth=1;" edge="1" source="a_house" target="uc_my_tasks" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_house_start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#b8860b;strokeWidth=1;" edge="1" source="a_house" target="uc_start_task" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_house_complete" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#b8860b;strokeWidth=1;" edge="1" source="a_house" target="uc_complete_task" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_house_inv" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#b8860b;strokeWidth=1;" edge="1" source="a_house" target="uc_inventory" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== CONNECTIONS: ADMIN ==================== -->
+        <mxCell id="e_admin_staff" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_manage_staff" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_restore" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_restore_room" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_reports" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_reports_dashboard" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_revenue" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_revenue" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_occup" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_occupancy" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_overdue" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_overdue" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_pop" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_popularity" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_log" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_act_log" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_sched" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_schedule" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_journal" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_journal" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_clreports" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_clean_reports" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_admin_export" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#c0392b;strokeWidth=1;" edge="1" source="a_admin" target="uc_export_data" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== INCLUDE RELATIONSHIPS ==================== -->
+
+        <!-- Одобрение заявки include Создание брони (via ManageBookings) -->
+        <mxCell id="inc1" value="«include»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#999;dashed=1;dashPattern=5 3;fontSize=9;fontColor=#999;" edge="1" source="uc_approve_request" target="uc_manage_bookings" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Выселение include Создание заданий -->
+        <mxCell id="inc2" value="«include»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#999;dashed=1;dashPattern=5 3;fontSize=9;fontColor=#999;" edge="1" source="uc_checkout" target="uc_manage_tasks" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Регистрация include Создание гостя -->
+        <mxCell id="inc3" value="«include»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#999;dashed=1;dashPattern=5 3;fontSize=9;fontColor=#999;" edge="1" source="uc_register" target="uc_manage_guests" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Завершение задания include Отчёт об уборке -->
+        <mxCell id="inc4" value="«include»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#999;dashed=1;dashPattern=5 3;fontSize=9;fontColor=#999;" edge="1" source="uc_complete_task" target="uc_clean_reports" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== EXTEND RELATIONSHIPS ==================== -->
+
+        <!-- Бронирование гостем extend Выбор корп. типа → Управление организациями -->
+        <mxCell id="ext1" value="«extend»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#C5A059;dashed=1;dashPattern=3 3;fontSize=9;fontColor=#C5A059;" edge="1" source="uc_manage_orgs" target="uc_submit_request" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Завершение задания extend Фото повреждений -->
+        <mxCell id="ext2" value="«extend»" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#C5A059;dashed=1;dashPattern=3 3;fontSize=9;fontColor=#C5A059;" edge="1" source="uc_complete_task" target="uc_manage_acts" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
