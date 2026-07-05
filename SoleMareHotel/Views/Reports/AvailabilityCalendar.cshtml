@@ -1,0 +1,90 @@
+@using SoleMareHotel.Models
+@{
+    ViewData["Title"] = "Календарь доступности";
+
+    int month = (int)(ViewBag.Month ?? DateTime.Today.Month);
+    int year = (int)(ViewBag.Year ?? DateTime.Today.Year);
+    DateTime startDate = (DateTime)(ViewBag.StartDate ?? DateTime.Today);
+    DateTime endDate = (DateTime)(ViewBag.EndDate ?? DateTime.Today.AddDays(30));
+    var rooms = ViewBag.Rooms as IEnumerable<Room>;
+    var bookings = ViewBag.Bookings as IEnumerable<Booking>;
+
+    var monthNames = new[] { "", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" };
+
+    int prevMonth = month - 1;
+    int prevYear = year;
+    if (prevMonth < 1) { prevMonth = 12; prevYear--; }
+    int nextMonth = month + 1;
+    int nextYear = year;
+    if (nextMonth > 12) { nextMonth = 1; nextYear++; }
+}
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Календарь доступности</h1>
+    <div class="gold-line"></div>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <a href="/Reports/AvailabilityCalendar?month=@prevMonth&year=@prevYear" class="btn-sole-mare">← @monthNames[prevMonth]</a>
+    <h2 style="color: var(--navy); margin: 0;">@monthNames[month] @year</h2>
+    <a href="/Reports/AvailabilityCalendar?month=@nextMonth&year=@nextYear" class="btn-sole-mare">@monthNames[nextMonth] →</a>
+</div>
+
+<div style="overflow-x: auto;">
+    <table class="sole-table" style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                <th style="position: sticky; left: 0; background: #f8f6f0; z-index: 1; min-width: 120px;">Номер</th>
+                @for (var d = startDate; d < endDate; d = d.AddDays(1))
+                {
+                    var isWeekend = d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday;
+                    <th style="min-width: 32px; text-align: center; font-size: 0.7rem; padding: 8px 2px; color: @(isWeekend ? "var(--gold)" : "var(--navy)");">
+                        @d.ToString("dd")<br/><span style="font-size: 0.6rem;">@d.ToString("ddd")</span>
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (rooms != null)
+            {
+                @foreach (var room in rooms)
+                {
+                    <tr>
+                        <td style="position: sticky; left: 0; background: white; z-index: 1; font-weight: 600; font-size: 0.8rem; white-space: nowrap;">
+                            @room.RoomNumber<br/><span style="color: var(--gold); font-size: 0.7rem; font-weight: 400;">@room.Category?.Name</span>
+                        </td>
+                        @for (var d = startDate; d < endDate; d = d.AddDays(1))
+                        {
+                            var date = d;
+                            var isBooked = bookings?.Any(b =>
+                                b.RoomId == room.RoomId &&
+                                b.CheckIn <= date && b.CheckOut > date) == true;
+                            var isToday = d.Date == DateTime.Today;
+
+                            var bgColor = isBooked ? "#fde8e8" : "#e6f7f0";
+                            var textColor = isBooked ? "#c0392b" : "#27ae60";
+                            var text = isBooked ? "З" : "Св";
+
+                            if (isToday)
+                            {
+                                bgColor = isBooked ? "#f5c6c6" : "#b8e6cc";
+                                <td style="text-align: center; font-size: 0.65rem; font-weight: 700; padding: 6px 2px; background: @bgColor; color: @textColor; border: 2px solid var(--gold);">@text</td>
+                            }
+                            else
+                            {
+                                <td style="text-align: center; font-size: 0.65rem; padding: 6px 2px; background: @bgColor; color: @textColor;">@text</td>
+                            }
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-top: 15px; display: flex; gap: 20px; font-size: 0.8rem; color: #666;">
+    <span><span style="display: inline-block; width: 14px; height: 14px; background: #e6f7f0; border: 1px solid #ccc; vertical-align: middle; margin-right: 5px;"></span> Свободен</span>
+    <span><span style="display: inline-block; width: 14px; height: 14px; background: #fde8e8; border: 1px solid #ccc; vertical-align: middle; margin-right: 5px;"></span> Забронирован</span>
+    <span><span style="display: inline-block; width: 14px; height: 14px; border: 2px solid var(--gold); vertical-align: middle; margin-right: 5px;"></span> Сегодня</span>
+</div>

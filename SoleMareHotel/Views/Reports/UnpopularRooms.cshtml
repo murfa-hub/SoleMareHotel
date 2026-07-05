@@ -1,0 +1,43 @@
+﻿@model IEnumerable<SoleMareHotel.Models.Room>
+
+@{
+    ViewData["Title"] = "Непопулярные номера";
+}
+
+<div style="margin-bottom: 20px;">
+    <a href="/Reports" style="color: var(--teal); text-decoration: none;">← Назад к отчётам</a>
+</div>
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Непопулярные номера</h1>
+    <p style="color: #666;">Сортировка по количеству бронирований (от меньшего к большему)</p>
+    <div class="gold-line"></div>
+</div>
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Категория</th>
+            <th>Статус</th>
+            <th>Цена/сутки</th>
+            <th>Кол-во броней</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                <tr>
+                    <td>@item.RoomNumber</td>
+                    <td>@item.Category?.Name</td>
+                    <td>@item.Status.GetDisplayName()</td>
+                    <td>@item.PricePerNight.ToString("N2") €</td>
+                    <td>@item.Bookings?.Count</td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    <a href="/Reports/ExportUnpopularExcel" class="btn-sole-mare-fill">Скачать Excel</a>
+</div>

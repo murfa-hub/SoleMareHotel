@@ -1,0 +1,32 @@
+@model SoleMareHotel.Models.Payment
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Удалить платёж";
+}
+
+<div style="max-width: 500px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Удалить платёж</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <h3 style="color: #c0392b;">Вы уверены?</h3>
+        <hr />
+        <p><strong>Номер:</strong> @Model.PaymentNumber</p>
+        <p><strong>Дата:</strong> @Model.PaymentDate.ToString("dd.MM.yyyy HH:mm")</p>
+        <p><strong>Сумма:</strong> @Model.Amount.ToString("N2") €</p>
+        <p><strong>Способ:</strong> @Model.Method.GetDisplayName()</p>
+
+        <form asp-action="Delete" method="post" style="margin-top: 20px;">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="paymentId" value="@Model.PaymentId" />
+            <input type="hidden" name="bookingId" value="@Model.BookingId" />
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" class="btn-sole-mare-fill" style="background-color: #c0392b !important; border-color: #c0392b !important;">УДАЛИТЬ</button>
+                <a href="/Payments/Index?bookingId=@Model.BookingId" class="btn-sole-mare">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+@model SoleMareHotel.Models.Organization
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <a href="/Organizations" style="color: var(--teal); text-decoration: none;">← Назад к списку</a>
+        <h1 style="color: var(--navy); margin: 10px 0 0 0;">@Model.Name</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card" style="margin-bottom: 20px;">
+        <h3 style="color: var(--navy); margin-bottom: 15px;">Основные данные</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <label style="color: #666; display: block;">Наименование</label>
+                <strong>@Model.Name</strong>
+            </div>
+            <div>
+                <label style="color: #666; display: block;">ИНН</label>
+                <strong>@(Model.INN ?? "—")</strong>
+            </div>
+            <div>
+                <label style="color: #666; display: block;">ОГРН</label>
+                <strong>@(Model.OGRN ?? "—")</strong>
+            </div>
+            <div>
+                <label style="color: #666; display: block;">Статус</label>
+                @if (Model.IsActive)
+                {
+                    <span class="badge badge-confirmed">Активен</span>
+                }
+                else
+                {
+                    <span class="badge badge-rejected">Неактивен</span>
+                }
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.LegalAddress))
+        {
+            <div style="margin-top: 15px;">
+                <label style="color: #666; display: block;">Юридический адрес</label>
+                <strong>@Model.LegalAddress</strong>
+            </div>
+        }
+    </div>
+
+    <div class="sole-card" style="margin-bottom: 20px;">
+        <h3 style="color: var(--navy); margin-bottom: 15px;">Контактное лицо</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <label style="color: #666; display: block;">ФИО</label>
+                <strong>@(Model.ContactPersonName ?? "—")</strong>
+            </div>
+            <div>
+                <label style="color: #666; display: block;">Должность</label>
+                <strong>@(Model.ContactPersonPosition ?? "—")</strong>
+            </div>
+            <div>
+                <label style="color: #666; display: block;">Телефон</label>
+                <strong>@(Model.ContactPersonPhone ?? "—")</strong>
+            </div>
+            <div>
+                <label style="color: #666; display: block;">Email</label>
+                <strong>@(Model.ContactPersonEmail ?? "—")</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="sole-card" style="margin-bottom: 20px;">
+        <h3 style="color: var(--navy); margin-bottom: 15px;">Договор</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <label style="color: #666; display: block;">Номер договора</label>
+                <strong>@(Model.ContractNumber ?? "—")</strong>
+            </div>
+            <div>
+                <label style="color: #666; display: block;">Дата договора</label>
+                <strong>@(Model.ContractDate?.ToString("dd.MM.yyyy") ?? "—")</strong>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px;">
+        <a href="/Organizations/Edit/@Model.OrganizationId" class="btn-sole-mare-fill">Изменить</a>
+        <a href="/Organizations/Delete/@Model.OrganizationId" class="btn-sole-mare" style="color: #c0392b;">Удалить</a>
+    </div>
+</div>

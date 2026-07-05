@@ -1,0 +1,43 @@
+﻿@model SoleMareHotel.Models.Guest
+
+@{
+    ViewData["Title"] = "Удалить гостя";
+}
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="page-header"><h1>Удаление гостя</h1><div class="gold-line"></div></div>
+
+    <div class="sole-card">
+        <h3 style="color: #c0392b;">Вы уверены, что хотите удалить эту карточку?</h3>
+        <hr />
+
+        @if (Model.GuestType == "Организация")
+        {
+                <p><strong>Тип:</strong> 🏢 Организация</p>
+                <p><strong>Наименование:</strong> @Model.OrganizationName</p>
+                <p><strong>ИНН:</strong> @Model.INN</p>
+                <p><strong>ОГРН:</strong> @Model.OGRN</p>
+                <p><strong>Юр. адрес:</strong> @Model.LegalAddress</p>
+                <p><strong>Контактное лицо:</strong> @Model.ContactPersonName (@Model.ContactPersonPosition)</p>
+                <p><strong>Телефон:</strong> @Model.ContactPersonPhone</p>
+                <p><strong>Email:</strong> @Model.ContactPersonEmail</p>
+        }
+        else
+        {
+                <p><strong>Тип:</strong> 👤 Физическое лицо</p>
+                <p><strong>ФИО:</strong> @(Model.FullName ?? Model.Email ?? "Гость")</p>
+                <p><strong>Паспорт:</strong> @Model.IdentificationNumber @Model.PassportNumber</p>
+                <p><strong>Телефон:</strong> @Model.Phone</p>
+                <p><strong>Адрес:</strong> @Model.RegistrationAddress</p>
+                <p><strong>Дата рождения:</strong> @(Model.BirthDate?.ToString("dd.MM.yyyy") ?? "—")</p>
+        }
+
+        <form asp-action="Delete" method="post" style="margin-top: 20px;">
+            <input type="hidden" name="id" value="@Model.GuestId" />
+        <div class="form-actions">
+                <button type="submit" class="btn-sole-mare-fill" style="background-color: #c0392b !important; border-color: #c0392b !important;">УДАЛИТЬ</button>
+                <a href="/Guests" class="btn-sole-mare">ОТМЕНА</a>
+            </div>
+        </form>
+    </div>
+</div>

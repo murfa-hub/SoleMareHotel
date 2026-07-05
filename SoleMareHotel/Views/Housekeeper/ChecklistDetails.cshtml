@@ -1,0 +1,85 @@
+@model SoleMareHotel.Models.RoomChecklist
+
+@{
+    ViewData["Title"] = "Чек-лист — детали";
+}
+
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <a href="/Housekeeper/Checklists" style="color: var(--teal); text-decoration: none;">← Назад к чек-листам</a>
+    </div>
+
+    <div class="sole-card">
+        <h2 style="color: var(--navy); margin: 0 0 10px 0;">Чек-лист: Номер @Model.Room?.RoomNumber</h2>
+        <p style="color: var(--gold);">Горничная: @Model.HousekeeperName</p>
+        <p style="color: #666;">Дата: @Model.CheckDate.ToString("dd.MM.yyyy HH:mm")</p>
+        <div class="gold-line" style="margin-bottom: 20px;"></div>
+
+        <div style="margin-bottom: 15px;">
+            @if (Model.AllItemsOk)
+            {
+                <span class="badge badge-free" style="font-size: 1rem;">Все имущество в порядке</span>
+            }
+            else
+            {
+                <span class="badge badge-repair" style="font-size: 1rem;">Обнаружены замечания</span>
+            }
+        </div>
+
+        @if (Model.Items.Any())
+        {
+            var categories = Model.Items.GroupBy(i => i.Category ?? "Прочее").OrderBy(g => g.Key);
+
+            @foreach (var category in categories)
+            {
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: var(--navy); margin-bottom: 10px;">@category.Key</h4>
+                    <table class="sole-table">
+                        <thead>
+                            <tr>
+                                <th>Предмет</th>
+                                <th>Ожид.</th>
+                                <th>Факт.</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in category)
+                            {
+                                <tr>
+                                    <td>@item.ItemName</td>
+                                    <td>@item.ExpectedQuantity</td>
+                                    <td>@item.ActualQuantity</td>
+                                    <td>
+                                        @if (item.IsOk)
+                                        {
+                                            <span style="color: #27ae60;">✓</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="color: #e74c3c;">✗</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <div style="margin-top: 20px; padding: 15px; background: #f8f6f0; border-left: 4px solid var(--gold);">
+                <strong>Замечания:</strong> @Model.Notes
+            </div>
+        }
+
+        @if (Model.CleaningTask != null)
+        {
+            <div style="margin-top: 15px; color: #666; font-size: 0.9rem;">
+                Связанное задание: #@Model.CleaningTask.CleaningTaskId (@Model.CleaningTask.CleaningType.GetDisplayName())
+            </div>
+        }
+    </div>
+</div>

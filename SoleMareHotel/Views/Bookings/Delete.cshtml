@@ -1,0 +1,42 @@
+﻿@model SoleMareHotel.Models.Booking
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Удалить бронь";
+}
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Удалить бронирование</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <h3 style="color: #c0392b;">Вы уверены, что хотите удалить это бронирование?</h3>
+        <hr />
+        <p><strong>Номер брони:</strong> @Model.BookingNumber</p>
+        <p><strong>Гость:</strong> @Model.Guest?.FullName @Model.Guest?.OrganizationName</p>
+        <p><strong>Номер(а):</strong>
+            @Model.Room?.RoomNumber (@Model.Room?.Category?.Name)
+            @if (Model.BookingRooms != null && Model.BookingRooms.Any())
+            {
+                foreach (var br in Model.BookingRooms.Where(r => r.RoomId != Model.RoomId))
+                {
+                    <span>, @br.Room?.RoomNumber (@br.Room?.Category?.Name)</span>
+                }
+            }
+        </p>
+        <p><strong>Заезд:</strong> @Model.CheckIn.ToString("dd.MM.yyyy HH:mm")</p>
+        <p><strong>Выезд:</strong> @Model.CheckOut.ToString("dd.MM.yyyy HH:mm")</p>
+        <p><strong>Статус:</strong> @Model.Status.GetDisplayName()</p>
+        <p><strong>Стоимость:</strong> @Model.CalculateFullCost().ToString("N2") €</p>
+
+        <form asp-action="Delete" method="post" style="margin-top: 20px;">
+            <input type="hidden" name="id" value="@Model.BookingId" />
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" class="btn-sole-mare-fill" style="background-color: #c0392b !important; border-color: #c0392b !important;">УДАЛИТЬ</button>
+                <a href="/Bookings" class="btn-sole-mare">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>

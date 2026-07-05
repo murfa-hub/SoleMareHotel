@@ -1,0 +1,99 @@
+﻿@model IEnumerable<SoleMareHotel.Models.Booking>
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Бронирования";
+}
+
+@if (TempData["Message"] != null)
+{
+    <div style="background-color: #2B7A78; color: white; padding: 15px; margin-bottom: 20px; font-weight: 600;">
+        @TempData["Message"]
+    </div>
+}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Бронирования</h1>
+        <div class="gold-line"></div>
+    </div>
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <a href="/Bookings/Create" class="btn-sole-mare-fill">+ Новое бронирование</a>
+    </div>
+</div>
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>№ брони</th>
+            <th>Тип</th>
+            <th>Гость</th>
+            <th>Номер</th>
+            <th>Заезд</th>
+            <th>Выезд</th>
+            <th>Гостей</th>
+            <th>Статус</th>
+            <th>Стоимость</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><a href="/Bookings/Details/@item.BookingId" style="color: var(--navy); text-decoration: none; font-weight: 600;">@item.BookingNumber</a></td>
+                <td>@item.BookingType.GetDisplayName()</td>
+                <td>
+                    @if (item.BookingType == BookingType.Corporate && item.Organization != null)
+                    {
+                        <strong>@item.Organization.Name</strong>
+                        <br/>
+                        <small>@item.Guest?.FullName</small>
+                    }
+                    else
+                    {
+                        @item.Guest?.FullName @item.Guest?.OrganizationName
+                    }
+                </td>
+                <td>@item.Room?.RoomNumber (@item.Room?.Category?.Name)</td>
+                <td>@item.CheckIn.ToString("dd.MM.yyyy")</td>
+                <td>@item.CheckOut.ToString("dd.MM.yyyy")</td>
+                <td>@item.NumberOfGuests</td>
+                <td>
+                    @switch (item.Status)
+                    {
+                        case BookingStatus.Booked: <span class="badge badge-booked">@item.Status.GetDisplayName()</span> break;
+                        case BookingStatus.Confirmed: <span class="badge badge-confirmed">@item.Status.GetDisplayName()</span> break;
+                        case BookingStatus.CheckedIn: <span class="badge badge-checkedin">@item.Status.GetDisplayName()</span> break;
+                        case BookingStatus.CheckedOut: <span class="badge badge-checkedout">@item.Status.GetDisplayName()</span> break;
+                        case BookingStatus.Cancelled: <span class="badge badge-cancelled">@item.Status.GetDisplayName()</span> break;
+                        default: @item.Status.GetDisplayName() break;
+                    }
+                </td>
+                <td>@item.CalculateFullCost().ToString("N2") €</td>
+                <td>
+                    @if (item.Status != BookingStatus.Cancelled && item.Status != BookingStatus.CheckedOut)
+                    {
+                        <a href="/GuestServiceOrders/Create?bookingId=@item.BookingId" class="table-action-gold">+ Усл.</a>
+                        <a href="/GuestServiceOrders/Index?bookingId=@item.BookingId" class="table-action-gold">Лиц.счёт</a>
+                    }
+                    <a href="/Bookings/ExportWord/@item.BookingId" class="table-action-teal">Счёт</a>
+                    @if (item.Status == BookingStatus.Confirmed)
+                    {
+                        <a href="/Bookings/CheckInForm?bookingId=@item.BookingId" class="table-action-success">Заселить</a>
+                    }
+                    @if (item.Status == BookingStatus.CheckedIn)
+                    {
+                        <form method="post" action="/Bookings/CheckOut" style="display: inline;" onsubmit="return confirm('Выселить гостя?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="bookingId" value="@item.BookingId" />
+                            <button type="submit" class="table-action-danger">Выселить</button>
+                        </form>
+                    }
+                    <a href="/Bookings/Edit/@item.BookingId" class="table-action">Изм.</a>
+                    <a href="/Bookings/Delete/@item.BookingId" class="table-action-danger" onclick="return confirm('Удалить бронь?');">Уд.</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

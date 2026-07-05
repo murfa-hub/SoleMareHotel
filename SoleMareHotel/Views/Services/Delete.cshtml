@@ -1,0 +1,27 @@
+﻿@model SoleMareHotel.Models.Service
+
+@{
+    ViewData["Title"] = "Удалить услугу";
+}
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Удалить услугу</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <h3 style="color: #c0392b;">Вы уверены, что хотите удалить эту услугу?</h3>
+        <hr />
+        <p><strong>Название:</strong> @Model.Name</p>
+        <p><strong>Цена:</strong> @Model.Price.ToString("N2") €</p>
+
+        <form asp-action="Delete" method="post" style="margin-top: 20px;">
+            <input type="hidden" name="id" value="@Model.ServiceId" />
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" class="btn-sole-mare-fill" style="background-color: #c0392b !important; border-color: #c0392b !important;">УДАЛИТЬ</button>
+                <a href="/Services" class="btn-sole-mare">ОТМЕНА</a>
+            </div>
+        </form>
+    </div>
+</div>

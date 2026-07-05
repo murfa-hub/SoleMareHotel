@@ -1,0 +1,30 @@
+﻿@model SoleMareHotel.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Удалить сотрудника";
+}
+
+<div style="max-width: 500px; margin: 0 auto;">
+    <div class="page-header"><h1>Удаление сотрудника</h1><div class="gold-line"></div></div>
+
+    <div class="sole-card">
+        <h3 style="color: #c0392b;">Удалить сотрудника?</h3>
+        <hr />
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>ФИО:</strong> @Model.FullName</p>
+        <p><strong>Роль:</strong> 
+            @if (Model.Role == "Admin") { <span>Администрация отеля</span> }
+            else if (Model.Role == "Receptionist") { <span>Ресепшен</span> }
+            else if (Model.Role == "Housekeeper") { <span>Горничная</span> }
+            else { <span>@Model.Role</span> }
+        </p>
+
+        <form asp-action="Delete" method="post" style="margin-top: 20px;">
+            <input type="hidden" asp-for="Id" />
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" class="btn-sole-mare-fill" style="background-color: #c0392b !important; border-color: #c0392b !important;">Удалить</button>
+                <a href="/Staff" class="btn-sole-mare">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>

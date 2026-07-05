@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Отчёты";
+}
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Отчёты для администрации</h1>
+    <div class="gold-line"></div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+
+    <a href="/Reports/Revenue" style="text-decoration: none;">
+        <div class="sole-card" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 2.5rem; margin-bottom: 15px; color: var(--gold); font-weight: bold;">&euro;</div>
+            <h3 style="color: var(--navy); margin: 0;">Выручка за период</h3>
+            <p style="color: #666; margin-top: 10px;">Доходы от проживания и услуг</p>
+        </div>
+    </a>
+
+    <a href="/Reports/Calendar" style="text-decoration: none;">
+        <div class="sole-card" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 2.5rem; margin-bottom: 15px; color: var(--navy); font-weight: bold;">///</div>
+            <h3 style="color: var(--navy); margin: 0;">Календарь занятости</h3>
+            <p style="color: #666; margin-top: 10px;">Визуальный календарь номеров</p>
+        </div>
+    </a>
+
+    <a href="/Reports/UnpopularRooms" style="text-decoration: none;">
+        <div class="sole-card" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 2.5rem; margin-bottom: 15px; color: #c0392b; font-weight: bold;">&darr;</div>
+            <h3 style="color: var(--navy); margin: 0;">Непопулярные номера</h3>
+            <p style="color: #666; margin-top: 10px;">Номера с низкой загрузкой</p>
+        </div>
+    </a>
+
+    <a href="/Reports/OccupancyRate" style="text-decoration: none;">
+        <div class="sole-card" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 2.5rem; margin-bottom: 15px; color: var(--teal); font-weight: bold;">%</div>
+            <h3 style="color: var(--navy); margin: 0;">Занятость номеров</h3>
+            <p style="color: #666; margin-top: 10px;">Текущий процент загрузки</p>
+        </div>
+    </a>
+
+    <a href="/Reports/OverdueGuests" style="text-decoration: none;">
+        <div class="sole-card" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 2.5rem; margin-bottom: 15px; color: #c0392b; font-weight: bold;">!</div>
+            <h3 style="color: var(--navy); margin: 0;">Просроченные выезды</h3>
+            <p style="color: #666; margin-top: 10px;">Гости, не выехавшие вовремя</p>
+        </div>
+    </a>
+
+    <a href="/Reports/CategoryPopularity" style="text-decoration: none;">
+        <div class="sole-card" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 2.5rem; margin-bottom: 15px; color: var(--gold); font-weight: bold;">&star;</div>
+            <h3 style="color: var(--navy); margin: 0;">Популярность категорий</h3>
+            <p style="color: #666; margin-top: 10px;">Востребованность типов номеров</p>
+        </div>
+    </a>
+
+    <a href="/Reports/ActivityLog" style="text-decoration: none;">
+        <div class="sole-card" style="text-align: center; padding: 40px 20px;">
+            <div style="font-size: 2.5rem; margin-bottom: 15px; color: var(--navy); font-weight: bold;">///</div>
+            <h3 style="color: var(--navy); margin: 0;">История изменений</h3>
+            <p style="color: #666; margin-top: 10px;">Логирование действий персонала</p>
+        </div>
+    </a>
+
+</div>

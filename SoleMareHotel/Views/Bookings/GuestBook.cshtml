@@ -1,0 +1,121 @@
+﻿@model SoleMareHotel.Models.Room
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Бронирование номера";
+}
+
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <a href="/Rooms/Catalog" style="color: var(--teal); text-decoration: none;">← Назад к каталогу</a>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="message-error">@TempData["Error"]</div>
+    }
+    @if (TempData["Message"] != null)
+    {
+        <div class="message-success">@TempData["Message"]</div>
+    }
+
+    <div class="sole-card">
+        @if (!string.IsNullOrEmpty(Model.PhotoPath))
+        {
+                <img src="@Model.PhotoPath" style="width: 100%; height: 250px; object-fit: cover;" />
+        }
+
+        <div style="padding: 25px;">
+            <h1 style="color: var(--navy); margin: 0; font-size: 1.5rem;">Номер @Model.RoomNumber</h1>
+            <p style="color: var(--gold); font-size: 1.1rem; margin: 5px 0;">@Model.Category?.Name</p>
+            <div class="gold-line"></div>
+
+            <div style="display: flex; gap: 20px; margin: 20px 0; color: #666;">
+                <span>До @Model.Capacity чел.</span>
+                <span>Этаж @Model.Floor</span>
+                <span>@Model.PricePerNight.ToString("N0") €/сут.</span>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                    <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">@Model.Description</p>
+            }
+
+            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+            <h3 style="color: var(--navy); margin-bottom: 20px;">Оформить бронирование</h3>
+
+            <form method="post" action="/Bookings/GuestBook" class="sole-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="roomId" value="@Model.RoomId" />
+
+                <div style="margin-bottom: 20px; background: #f8f6f0; padding: 15px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 10px;">Тип бронирования</label>
+                    <div style="display: flex; gap: 20px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="radio" name="bookingType" value="@BookingType.Individual" checked onchange="toggleCorporate()" /> @BookingType.Individual.GetDisplayName()</label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="radio" name="bookingType" value="@BookingType.Corporate" onchange="toggleCorporate()" /> @BookingType.Corporate.GetDisplayName()</label>
+                    </div>
+                </div>
+
+                <div id="corporateFields" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Организация *</label>
+                        <select name="organizationId" id="organizationIdSelect">
+                            <option value="">-- Выберите организацию --</option>
+                            @foreach (var org in ViewBag.Organizations)
+                            {
+                                <option value="@org.OrganizationId">@org.Name (@(org.ContractNumber ?? "без договора"))</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group"><label class="form-label">Контактное лицо</label><input name="contactPerson" placeholder="ФИО ответственного" /></div>
+                    <div class="form-group"><label class="form-label">Телефон организации</label><input name="companyPhone" placeholder="+3 800 123-45-67" /></div>
+                    <div class="form-group"><label class="form-label">Список сотрудников</label><textarea name="employeesList" rows="3" placeholder="Иванов И.И., Петров П.П."></textarea></div>
+                    <div class="form-group">
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" name="isCompanyGuarantor" value="true" />
+                            <span>Организация — гарант оплаты</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label style="font-weight: 600;">Дата заезда *</label>
+                        <input name="checkIn" type="date" required />
+                    </div>
+                    <div>
+                        <label style="font-weight: 600;">Дата выезда *</label>
+                        <input name="checkOut" type="date" required />
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label style="font-weight: 600;">Взрослых *</label>
+                        <input name="adults" type="number" value="1" min="1" required />
+                    </div>
+                    <div>
+                        <label style="font-weight: 600;">Детей (до 12 лет)</label>
+                        <input name="children" type="number" value="0" min="0" />
+                    </div>
+                </div>
+                <small style="color: #666; display: block; margin-top: 5px; margin-bottom: 15px;">Максимум: @Model.Capacity чел. (взрослые + дети)</small>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight: 600;">Пожелания</label>
+                    <textarea name="comment" rows="3" placeholder="Особые пожелания..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-sole-mare-fill" style="width: 100%;">Отправить заявку</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleCorporate() {
+        var isCorporate = document.querySelector('input[name="bookingType"]:checked').value === '@BookingType.Corporate';
+        document.getElementById('corporateFields').style.display = isCorporate ? 'block' : 'none';
+        document.getElementById('organizationIdSelect').required = isCorporate;
+    }
+</script>

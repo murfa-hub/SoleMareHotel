@@ -1,0 +1,76 @@
+﻿@model IEnumerable<SoleMareHotel.Models.Booking>
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Мои бронирования";
+}
+
+@if (TempData["Message"] != null)
+{
+        <div class="message-success">
+        @TempData["Message"]
+        </div>
+}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Мои бронирования</h1>
+        <div class="gold-line"></div>
+    </div>
+    <a href="/Rooms/Catalog" class="btn-sole-mare-fill">Найти номер</a>
+</div>
+
+@if (!Model.Any())
+{
+        <div class="sole-card" style="text-align: center; padding: 40px;">
+            <p style="color: #666;">У вас пока нет бронирований.</p>
+            <a href="/Rooms/Catalog" class="btn-sole-mare-fill">Перейти в каталог</a>
+        </div>
+}
+else
+{
+        <table class="sole-table">
+            <thead>
+                <tr>
+                    <th>№ брони</th>
+                    <th>Тип</th>
+                    <th>Номер</th>
+                    <th>Заезд</th>
+                    <th>Выезд</th>
+                    <th>Гостей</th>
+                    <th>Статус</th>
+                    <th>Стоимость</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                        <tr>
+                            <td>@item.BookingNumber</td>
+                            <td>@item.BookingType.GetDisplayName()</td>
+                            <td>@item.Room?.RoomNumber (@item.Room?.Category?.Name)</td>
+                            <td>@item.CheckIn.ToString("dd.MM.yyyy")</td>
+                            <td>@item.CheckOut.ToString("dd.MM.yyyy")</td>
+                            <td>@item.NumberOfGuests</td>
+                            <td>@item.Status.GetDisplayName()</td>
+                            <td><strong>@item.CalculateFullCost().ToString("N2") €</strong></td>
+                            <td>
+                        @if (item.Status == BookingStatus.Booked || item.Status == BookingStatus.Confirmed)
+                        {
+                                    <form method="post" action="/Bookings/Cancel" style="display: inline;" onsubmit="return confirm('Отменить бронь?');">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="bookingId" value="@item.BookingId" />
+                                        <button type="submit" class="table-action-danger">Отменить</button>
+                                    </form>
+                        }
+                        @if (item.Status == BookingStatus.CheckedIn)
+                        {
+                                        <a href="/GuestServiceOrders/Index?bookingId=@item.BookingId" class="table-action-gold">Услуги</a>
+                        }
+                            </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}

@@ -1,0 +1,147 @@
+﻿@using SoleMareHotel.Models
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity
+@inject HotelDbContext dbContext
+@inject UserManager<ApplicationUser> userManager
+
+@{
+    int newRequestsCount = 0;
+    if (User.Identity?.IsAuthenticated == true && (User.IsInRole("Admin") || User.IsInRole("Receptionist")))
+    {
+        newRequestsCount = dbContext.BookingRequests.Count(r => r.Status == RequestStatus.New);
+    }
+
+    string profileLetter = "U";
+    if (User.Identity?.IsAuthenticated == true)
+    {
+        var appUser = await userManager.FindByEmailAsync(User.Identity?.Name ?? "");
+        var displayName = appUser?.FullName ?? User.Identity?.Name ?? "U";
+        var nameParts = displayName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        profileLetter = nameParts.Length > 0 ? nameParts[0].Substring(0, 1).ToUpper() : "U";
+    }
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sole Mare Hotel</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav style="background-color: var(--navy); padding: 12px 0;">
+            <div style="max-width: 1500px; margin: 0 auto; padding: 0 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <a href="/" style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.5rem; text-decoration: none; letter-spacing: 2px; flex-shrink: 0;">
+                        SOLE MARE
+                    </a>
+                    <div style="display: flex; gap: 2px; align-items: center; justify-content: flex-end;">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            @if (User.IsInRole("Admin") || User.IsInRole("Receptionist"))
+                            {
+                                <a href="/Home/Index" class="nav-link">Главная</a>
+                                <a href="/Bookings/Index" class="nav-link">Брони</a>
+                                <a href="/BookingRequests/Index" class="nav-link" style="position: relative;">
+                                    Заявки
+                                    @if (newRequestsCount > 0)
+                                    {
+                                        <span class="nav-badge">@newRequestsCount</span>
+                                    }
+                                </a>
+                                <a href="/Guests/Index" class="nav-link">Гости</a>
+                                <a href="/Organizations/Index" class="nav-link">Организации</a>
+                                <a href="/Rooms/Index" class="nav-link">Номера</a>
+                                <a href="/RoomCategories/Index" class="nav-link">Категории</a>
+                                <a href="/Services/Index" class="nav-link">Услуги</a>
+                                <a href="/Housekeeper/AllTasks" class="nav-link">Уборка</a>
+                                <a href="/Housekeeper/Checklists" class="nav-link">Чек-листы</a>
+                                <a href="/Acts/Index" class="nav-link">Акты</a>
+                            }
+                            @if (User.IsInRole("Guest"))
+                            {
+                                <a href="/Home/Index" class="nav-link">Главная</a>
+                                <a href="/Rooms/Catalog" class="nav-link">Поиск</a>
+                                <a href="/BookingRequests/MyRequests" class="nav-link">Заявки</a>
+                                <a href="/Bookings/MyBookings" class="nav-link">Брони</a>
+                            }
+                            @if (User.IsInRole("Housekeeper"))
+                            {
+                                var hkEmail = User.Identity?.Name ?? "";
+                                var newTasksCount = dbContext.CleaningTasks.Count(t => t.AssignedTo == hkEmail && t.Status == CleaningTaskStatus.Assigned);
+
+                                <a href="/Home/Index" class="nav-link">Главная</a>
+                                <a href="/Housekeeper/Tasks" class="nav-link" style="position: relative;">
+                                    Задания
+                                    @if (newTasksCount > 0)
+                                    {
+                                        <span class="nav-badge">@newTasksCount</span>
+                                    }
+                                </a>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <span class="nav-separator">|</span>
+                                <a href="/Reports/Index" class="nav-link-admin">Отчёты</a>
+                                <a href="/Reports/AvailabilityCalendar" class="nav-link-admin">Календарь</a>
+                                <a href="/Staff/Index" class="nav-link-admin">Персонал</a>
+                                <a href="/Housekeeper/Schedule" class="nav-link-admin">График</a>
+                                <a href="/Housekeeper/Journal" class="nav-link-admin">Журнал</a>
+                                <a href="/Housekeeper/Stats" class="nav-link-admin">Статистика</a>
+                            }
+                            <a href="/Account/Profile" class="nav-avatar" title="Личный кабинет">
+                                @profileLetter
+                            </a>
+                    }
+                    else
+                    {
+                        <a href="/Home/Index" class="nav-link">Главная</a>
+                        <a href="/Rooms/Catalog" class="nav-link">Номера</a>
+                        <a href="/Account/Login" class="nav-link-admin">Войти</a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" style="max-width: 1200px; margin: 40px auto; padding: 0 20px; min-height: 70vh;">
+        @RenderBody()
+    </main>
+
+    <footer style="background-color: var(--navy); color: white; padding: 40px 20px 20px; font-size: 0.8rem; letter-spacing: 1px;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 30px;">
+                <div>
+                    <h3 style="color: var(--gold); font-family: 'Playfair Display', serif; margin: 0 0 12px 0; font-size: 1.1rem;">SOLE MARE</h3>
+                    <p style="color: #aab; margin: 0 0 8px 0; line-height: 1.6;">Роскошный отель на побережье.<br/>Изысканный отдых и безупречный сервис.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--gold); margin: 0 0 12px 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Навигация</h4>
+                    <p style="margin: 0 0 6px 0;"><a href="/Rooms/Catalog" style="color: #ccd; text-decoration: none;">Каталог номеров</a></p>
+                    <p style="margin: 0 0 6px 0;"><a href="/Services/Index" style="color: #ccd; text-decoration: none;">Услуги</a></p>
+                    <p style="margin: 0 0 6px 0;"><a href="/Home/Privacy" style="color: #ccd; text-decoration: none;">Политика конфиденциальности</a></p>
+                </div>
+                <div>
+                    <h4 style="color: var(--gold); margin: 0 0 12px 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Контакты</h4>
+                    <p style="color: #ccd; margin: 0 0 6px 0;">Набережная, д. 1</p>
+                    <p style="color: #ccd; margin: 0 0 6px 0;">+3 800 123-45-67</p>
+                    <p style="color: #ccd; margin: 0 0 6px 0;">info@solemare.com</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--gold); margin: 0 0 12px 0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Режим работы</h4>
+                    <p style="color: #ccd; margin: 0 0 6px 0;">Ресепшн: 24/7</p>
+                    <p style="color: #ccd; margin: 0 0 6px 0;">Заселение: с 14:00</p>
+                    <p style="color: #ccd; margin: 0;">Выезд: до 12:00</p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; text-align: center; color: #778;">
+                &copy; 2026 Sole Mare Hotel — Все права защищены
+            </div>
+        </div>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿@model SoleMareHotel.Models.Guest
+
+@{
+    ViewData["Title"] = "Изменить гостя";
+}
+
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Изменить: @(Model.FullName ?? Model.OrganizationName ?? Model.Email)</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <form asp-action="Edit" class="sole-form">
+            <div asp-validation-summary="All" style="color: #c0392b; margin-bottom: 20px;"></div>
+            <input type="hidden" name="GuestId" value="@Model.GuestId" />
+
+            <div style="margin-bottom: 20px; background: #f8f6f0; padding: 20px;">
+                <label class="form-label">Tipo di ospite / Тип гостя</label>
+                <div style="display: flex; gap: 20px;">
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="GuestType" value="Физическое лицо" @(Model.GuestType == "Физическое лицо" ? "checked" : "") onchange="toggleGuestFields()" /> 👤 Физическое лицо
+                    </label>
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="GuestType" value="Организация" @(Model.GuestType == "Организация" ? "checked" : "") onchange="toggleGuestFields()" /> 🏢 Организация
+                    </label>
+                </div>
+            </div>
+
+            <div id="individualFields" style="display: @(Model.GuestType == "Физическое лицо" ? "block" : "none");">
+                <h3 style="color: var(--navy); margin-bottom: 15px;">Данные физического лица</h3>
+                <div class="form-group">
+                    <label class="form-label">ФИО</label>
+                    <input name="FullName" value="@Model.FullName" />
+                </div>
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div><label class="form-label">Идентификационный номер</label><input name="IdentificationNumber" value="@Model.IdentificationNumber" /></div>
+                    <div><label class="form-label">Номер паспорта / код паспорта</label><input name="PassportNumber" value="@Model.PassportNumber" /></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Телефон</label>
+                    <input name="Phone" value="@Model.Phone" placeholder="+39 333 123 4567" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Адрес регистрации</label>
+                    <input name="RegistrationAddress" value="@Model.RegistrationAddress" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Дата рождения</label>
+                    <input name="BirthDate" type="date" value="@(Model.BirthDate?.ToString("yyyy-MM-dd"))" />
+                </div>
+            </div>
+
+            <div id="organizationFields" style="display: @(Model.GuestType == "Организация" ? "block" : "none");">
+                <h3 style="color: var(--navy); margin-bottom: 15px;">Данные организации</h3>
+                <div class="form-group">
+                    <label class="form-label">Полное наименование</label>
+                    <input name="OrganizationName" value="@Model.OrganizationName" />
+                </div>
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div><label class="form-label">Partita IVA</label><input name="INN" value="@Model.INN" /></div>
+                    <div><label class="form-label">Codice Fiscale</label><input name="OGRN" value="@Model.OGRN" /></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Юридический адрес</label>
+                    <input name="LegalAddress" value="@Model.LegalAddress" />
+                </div>
+                <h3 style="color: var(--navy); margin: 20px 0 15px 0;">Контактное лицо</h3>
+                <div class="form-group"><label class="form-label">ФИО</label><input name="ContactPersonName" value="@Model.ContactPersonName" /></div>
+                <div class="form-group"><label class="form-label">Должность</label><input name="ContactPersonPosition" value="@Model.ContactPersonPosition" /></div>
+                <div class="form-group"><label class="form-label">Телефон</label><input name="ContactPersonPhone" value="@Model.ContactPersonPhone" /></div>
+                <div class="form-group"><label class="form-label">Email</label><input name="ContactPersonEmail" value="@Model.ContactPersonEmail" /></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-sole-mare-fill">СОХРАНИТЬ</button>
+                <a href="/Guests" class="btn-sole-mare">ОТМЕНА</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleGuestFields() {
+        var isIndividual = document.querySelector('input[name="GuestType"]:checked').value === 'Физическое лицо';
+        document.getElementById('individualFields').style.display = isIndividual ? 'block' : 'none';
+        document.getElementById('organizationFields').style.display = isIndividual ? 'none' : 'block';
+    }
+</script>

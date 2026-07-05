@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Календарь занятости";
+    var rooms = ViewBag.Rooms as List<SoleMareHotel.Models.Room>;
+    var occupancy = ViewBag.Occupancy as Dictionary<int, HashSet<DateTime>>;
+    var today = DateTime.Today;
+    var firstDay = ViewBag.FirstDay as DateTime? ?? DateTime.Today;
+    var prevMonth = ViewBag.PrevMonth as DateTime? ?? DateTime.Today;
+    var nextMonth = ViewBag.NextMonth as DateTime? ?? DateTime.Today;
+}
+
+<div style="margin-bottom: 20px;">
+    <a href="/Reports" style="color: var(--teal); text-decoration: none;">← Назад к отчётам</a>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <a href="/Reports/Calendar?year=@prevMonth.Year&month=@prevMonth.Month" style="font-size: 1.5rem; text-decoration: none; color: var(--navy);">◀</a>
+    <h1 style="color: var(--navy); margin: 0; text-transform: capitalize;">@ViewBag.MonthName @ViewBag.Year</h1>
+    <a href="/Reports/Calendar?year=@nextMonth.Year&month=@nextMonth.Month" style="font-size: 1.5rem; text-decoration: none; color: var(--navy);">▶</a>
+</div>
+
+<div style="overflow-x: auto;">
+    <table style="border-collapse: collapse; min-width: 800px; background: white; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+        <thead>
+            <tr style="background: var(--navy); color: white;">
+                <th style="padding: 12px; text-align: left; min-width: 100px;">Номер</th>
+                <th style="padding: 12px; text-align: left; min-width: 80px;">Кат.</th>
+                @for (int d = 1; d <= ViewBag.DaysInMonth; d++)
+                {
+                    var date = new DateTime(ViewBag.Year, ViewBag.Month, d);
+                    var isToday = date == today;
+                    var isWeekend = date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+                        <th style="padding: 6px 4px; text-align: center; min-width: 28px; font-size: 0.7rem; @(isToday ? "background: var(--gold); color: white;" : "") @(isWeekend ? "opacity: 0.7;" : "")">
+                        @d<br/><span style="font-size: 0.6rem;">@date.ToString("dd.MM")[..2]</span>
+                        </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in rooms ?? new())
+            {
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px; font-weight: 600; color: var(--navy);">@room.RoomNumber</td>
+                        <td style="padding: 10px; font-size: 0.8rem; color: var(--gold);">@room.Category?.Name?.Substring(0, Math.Min(room.Category?.Name?.Length ?? 0, 4))</td>
+                    @for (int d = 1; d <= ViewBag.DaysInMonth; d++)
+                    {
+                        var date = new DateTime(ViewBag.Year, ViewBag.Month, d);
+                        var isOccupied = occupancy != null && occupancy.ContainsKey(room.RoomId) && occupancy[room.RoomId].Contains(date);
+                                <td style="padding: 0; text-align: center;">
+                                    <div style="width: 100%; height: 28px; background: @(isOccupied ? "#c0392b" : "#27ae60"); border-radius: 3px; margin: 1px;"
+                                         title="@room.RoomNumber — @date.ToString("dd.MM.yyyy") — @(isOccupied ? "Занят" : "Свободен")">
+                                    </div>
+                                </td>
+                    }
+                    </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div style="display: flex; gap: 20px; margin-top: 20px; font-size: 0.85rem;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="width: 20px; height: 20px; background: #27ae60; border-radius: 3px;"></div>
+        <span>Свободен</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="width: 20px; height: 20px; background: #c0392b; border-radius: 3px;"></div>
+        <span>Занят</span>
+    </div>
+</div>

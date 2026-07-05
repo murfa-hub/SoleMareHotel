@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SoleMareHotel.Models.Booking>
+
+@{
+    ViewData["Title"] = "Просроченные выезды";
+}
+
+<div style="margin-bottom: 20px;">
+    <a href="/Reports" style="color: var(--teal); text-decoration: none;">← Назад к отчётам</a>
+</div>
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Гости, не освободившие номер вовремя</h1>
+    <p style="color: #666;">Дата выезда меньше текущей даты, статус «Заселено»</p>
+    <div class="gold-line"></div>
+</div>
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>№ брони</th>
+            <th>Гость</th>
+            <th>Номер</th>
+            <th>Заезд</th>
+            <th>Выезд (план)</th>
+            <th>Просрочка (дней)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var overdueDays = (DateTime.Today - item.CheckOut.Date).Days;
+                <tr style="background-color: #fde8e8;">
+                    <td>@item.BookingNumber</td>
+                    <td>@item.Guest?.FullName @item.Guest?.OrganizationName</td>
+                    <td>@item.Room?.RoomNumber</td>
+                    <td>@item.CheckIn.ToString("dd.MM.yyyy")</td>
+                    <td><strong style="color: #c0392b;">@item.CheckOut.ToString("dd.MM.yyyy")</strong></td>
+                    <td><strong style="color: #c0392b;">@overdueDays дн.</strong></td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Any())
+{
+        <div style="margin-top: 20px;">
+            <a href="/Reports/ExportOverdueExcel" class="btn-sole-mare-fill">📥 СКАЧАТЬ EXCEL</a>
+        </div>
+}
+else
+{
+        <div class="sole-card" style="text-align: center; padding: 40px;">
+            <p style="color: #27ae60; font-size: 1.2rem;">✅ Все гости выехали вовремя</p>
+        </div>
+}

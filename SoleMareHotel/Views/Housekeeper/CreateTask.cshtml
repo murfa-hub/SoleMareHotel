@@ -1,0 +1,54 @@
+﻿@using SoleMareHotel.Models
+@{
+    ViewData["Title"] = "Создать задание на уборку";
+    var housekeepers = ViewBag.Housekeepers as List<SoleMareHotel.Models.ApplicationUser>;
+}
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Создать задание</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <form method="post" class="sole-form">
+            @Html.AntiForgeryToken()
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600;">Номер</label>
+                <select name="roomId" required>
+                    <option value="">-- Выберите --</option>
+                    @foreach (var room in ViewBag.Rooms)
+                    {
+                            <option value="@room.RoomId">@room.RoomNumber — @room.Category?.Name (@(((RoomStatus)room.Status).GetDisplayName()))</option>
+                    }
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600;">Тип уборки</label>
+                <select name="cleaningType" required>
+                    <option value="@((int)CleaningType.Departure)">Выездная</option>
+                    <option value="@((int)CleaningType.Intermediate)">Промежуточная</option>
+                    <option value="@((int)CleaningType.Unscheduled)">Внеплановая</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600;">Назначить горничную</label>
+                <select name="assignedTo" required>
+                    <option value="">-- Выберите --</option>
+                    @if (housekeepers != null)
+                    {
+                        foreach (var hk in housekeepers)
+                        {
+                                    <option value="@hk.Email">@hk.FullName (@hk.Email)</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: 600;">Особые отметки</label>
+                <textarea name="notes" rows="2" placeholder="Дополнительные указания..."></textarea>
+            </div>
+            <button type="submit" class="btn-sole-mare-fill" style="width: 100%;">Создать задание</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Вход в систему";
+}
+
+<div style="max-width: 450px; margin: 100px auto;">
+    <div class="sole-card">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="color: var(--navy); font-family: 'Playfair Display', serif; margin: 0;">SOLE MARE</h2>
+            <div class="gold-line" style="margin: 10px auto;"></div>
+            <p style="color: #666;">Вход в систему управления</p>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+                <div style="background-color: #fde8e8; color: #c0392b; padding: 12px; margin-bottom: 20px; border-left: 4px solid #c0392b;">
+                @ViewBag.Error
+                </div>
+        }
+
+        <form method="post" class="sole-form">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input name="email" type="email" required placeholder="admin@solemare.com" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Пароль</label>
+                <div class="pwd-input-wrap">
+                    <input id="password" name="password" type="password" required placeholder="Введите пароль" />
+                    <button type="button" class="pwd-toggle" onclick="togglePassword('password', this)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="btn-sole-mare-fill" style="width: 100%;">ВОЙТИ</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px; padding: 15px; background: #f8f6f0;">
+            <p style="color: #666; margin: 0;">Нет аккаунта? <a href="/Account/Register" style="color: var(--navy); font-weight: 600; text-decoration: underline;">Зарегистрироваться как гость</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePassword(fieldId, btn) {
+        var field = document.getElementById(fieldId);
+        if (field.type === 'password') {
+            field.type = 'text';
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+        } else {
+            field.type = 'password';
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+        }
+    }
+</script>

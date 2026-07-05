@@ -1,0 +1,65 @@
+﻿@model IEnumerable<SoleMareHotel.Models.CleaningTask>
+@{
+    ViewData["Title"] = "Журнал выполненных работ";
+    var housekeepers = ViewBag.Housekeepers as List<SoleMareHotel.Models.ApplicationUser>;
+}
+
+<div style="margin-bottom: 20px;">
+    <h1 style="color: var(--navy); margin: 0;">Журнал выполненных работ</h1>
+    <p style="color: #666;">История всех уборок</p>
+    <div class="gold-line"></div>
+</div>
+
+<form method="get" class="filter-bar" style="margin-bottom: 20px;">
+    <div class="filter-group-date">
+        <label>С</label>
+        <input name="dateFrom" type="date" value="@ViewBag.DateFrom" />
+    </div>
+    <div class="filter-group-date">
+        <label>По</label>
+        <input name="dateTo" type="date" value="@ViewBag.DateTo" />
+    </div>
+    <div class="filter-group">
+        <label>Горничная</label>
+        <select name="housekeeper">
+            <option value="">Все</option>
+            @if (housekeepers != null)
+            {
+                foreach (var hk in housekeepers)
+                {
+                    <option value="@hk.Email" selected="@(ViewBag.SelectedHousekeeper == hk.Email)">@hk.FullName</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="filter-actions">
+        <button type="submit" class="btn-sole-mare-fill">Фильтр</button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+        <div class="sole-card" style="text-align: center; padding: 40px;">
+            <p style="color: #666;">Нет записей.</p>
+        </div>
+}
+else
+{
+        <table class="sole-table">
+            <thead>
+                <tr><th>Дата</th><th>Номер</th><th>Тип</th><th>Горничная</th><th>Результат</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var task in Model)
+            {
+                        <tr>
+                            <td>@task.CompletedAt?.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@task.Room?.RoomNumber</td>
+                            <td>@task.CleaningType.GetDisplayName()</td>
+                            <td>@task.AssignedTo</td>
+                            <td>@(task.Result?.GetDisplayName() ?? "—")</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}

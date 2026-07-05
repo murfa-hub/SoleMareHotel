@@ -1,0 +1,91 @@
+﻿@model IEnumerable<SoleMareHotel.Models.BookingRequest>
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Заявки на бронирование";
+}
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Заявки на бронирование</h1>
+    <div class="gold-line"></div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+        <div class="message-success">@TempData["Message"]</div>
+}
+
+@if (!Model.Any())
+{
+        <div class="sole-card" style="text-align: center; padding: 40px;">
+            <p style="color: #666;">Новых заявок нет.</p>
+        </div>
+}
+else
+{
+        <table class="sole-table">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Тип</th>
+                    <th>Гость / Организация</th>
+                    <th>Номер</th>
+                    <th>Заезд</th>
+                    <th>Выезд</th>
+                    <th>Гостей</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                        <tr>
+                            <td>@item.RequestNumber</td>
+                            <td>@item.BookingType.GetDisplayName()</td>
+                            <td>
+                        @if (item.BookingType == BookingType.Corporate)
+                        {
+                                        <strong>@(item.Organization?.Name ?? "—")</strong>
+                                        <br/>
+
+                            <small>Контакт: @item.ContactPerson</small>
+                        }
+                        else
+                        {
+                            @item.Guest?.FullName
+                        }
+                            </td>
+                            <td>@item.Room?.RoomNumber</td>
+                            <td>@item.CheckIn.ToString("dd.MM.yyyy")</td>
+                            <td>@item.CheckOut.ToString("dd.MM.yyyy")</td>
+                            <td>@item.Guests</td>
+                            <td>
+                                @switch (item.Status)
+                                {
+                                    case RequestStatus.New: <span class="badge badge-new">@item.Status.GetDisplayName()</span> break;
+                                    case RequestStatus.Confirmed: <span class="badge badge-confirmed">@item.Status.GetDisplayName()</span> break;
+                                    case RequestStatus.Rejected: <span class="badge badge-rejected">@item.Status.GetDisplayName()</span> break;
+                                    default: @item.Status.GetDisplayName() break;
+                                }
+                            </td>
+                            <td>
+                        @if (item.Status == RequestStatus.New)
+                        {
+                                        <form method="post" action="/BookingRequests/Approve" style="display: inline;">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="requestId" value="@item.BookingRequestId" />
+                                            <button type="submit" style="background: none; border: none; color: #27ae60; cursor: pointer; font-weight: 600;">Подтвердить</button>
+                                        </form>
+                                        <form method="post" action="/BookingRequests/Reject" style="display: inline;">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="requestId" value="@item.BookingRequestId" />
+                                            <button type="submit" style="background: none; border: none; color: #c0392b; cursor: pointer; font-weight: 600; margin-left: 10px;">Отклонить</button>
+                                        </form>
+                        }
+                            </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}

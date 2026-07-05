@@ -1,0 +1,101 @@
+﻿@model SoleMareHotel.Models.CleaningTask
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Завершение уборки";
+    var inventory = ViewBag.Inventory as List<SoleMareHotel.Models.RoomInventory>;
+}
+
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <a href="/Housekeeper/Tasks" style="color: var(--teal); text-decoration: none;">← Назад к заданиям</a>
+    </div>
+
+    <div class="sole-card">
+        <h2 style="color: var(--navy); margin: 0 0 10px 0;">Номер @Model.Room?.RoomNumber</h2>
+        <p style="color: var(--gold);">@Model.CleaningType.GetDisplayName() уборка</p>
+        <div class="gold-line" style="margin-bottom: 20px;"></div>
+
+        @if (inventory != null && inventory.Any())
+        {
+                <h4 style="color: var(--navy); margin-bottom: 15px;">Опись имущества</h4>
+                <table class="sole-table">
+                    <thead>
+                        <tr>
+                            <th>Предмет</th>
+                            <th>Кол-во</th>
+                            <th>Категория</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in inventory)
+                    {
+                                <tr>
+                                    <td>@item.ItemName</td>
+                                    <td>@item.ExpectedQuantity</td>
+                                    <td>@item.Category</td>
+                                </tr>
+                    }
+                    </tbody>
+                </table>
+        }
+        else
+        {
+                <p style="color: #666;">Опись отсутствует.</p>
+        }
+
+        <hr style="margin: 20px 0;" />
+
+        <form method="post" action="/Housekeeper/CompleteTask" enctype="multipart/form-data" class="sole-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="taskId" value="@Model.CleaningTaskId" />
+
+            <div style="margin-bottom: 20px; background: #f8f6f0; padding: 15px;">
+                <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" name="inventoryOk" value="true" checked onchange="toggleIssueFields()" id="inventoryOk" />
+                    <span>Имущество в порядке, всё на месте</span>
+                </label>
+            </div>
+
+            <div id="issueFields" style="display: none;">
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600;">Описание повреждений / недостачи</label>
+                    <textarea name="issueDescription" rows="3" placeholder="Что повреждено или отсутствует..."></textarea>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600;">Фото повреждений</label>
+                    <input type="file" name="photo" accept="image/*" />
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px; background: #f8f6f0; padding: 15px;">
+                <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" name="needsRepair" value="true" onchange="toggleRepairFields()" id="needsRepair" />
+                    <span>Обнаружены технические неисправности</span>
+                </label>
+            </div>
+
+            <div id="repairFields" style="display: none;">
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600;">Описание неисправности</label>
+                    <textarea name="repairDescription" rows="3" placeholder="Что не работает..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-sole-mare-fill" style="width: 100%;">Завершить уборку и отправить отчёт</button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="/Housekeeper/Checklist?roomId=@Model.RoomId&taskId=@Model.CleaningTaskId" class="btn-sole-mare">Открыть чек-лист инвентаризации</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleIssueFields() {
+        document.getElementById('issueFields').style.display = document.getElementById('inventoryOk').checked ? 'none' : 'block';
+    }
+    function toggleRepairFields() {
+        document.getElementById('repairFields').style.display = document.getElementById('needsRepair').checked ? 'block' : 'none';
+    }
+</script>

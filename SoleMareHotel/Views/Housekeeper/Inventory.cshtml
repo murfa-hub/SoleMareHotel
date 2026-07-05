@@ -1,0 +1,65 @@
+﻿@model IEnumerable<SoleMareHotel.Models.RoomInventory>
+@{
+    var room = ViewBag.Room as SoleMareHotel.Models.Room;
+    ViewData["Title"] = $"Опись — Номер {room?.RoomNumber}";
+}
+
+<div style="margin-bottom: 20px;">
+    <a href="/Rooms/Index" style="color: var(--teal); text-decoration: none;">← Назад к номерам</a>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Опись: Номер @room?.RoomNumber</h1>
+        <p style="color: #666;">@room?.Category?.Name</p>
+        <div class="gold-line"></div>
+    </div>
+</div>
+
+<div class="sole-card" style="margin-bottom: 20px;">
+    <h4 style="color: var(--navy); margin-bottom: 15px;">Добавить предмет</h4>
+    <form method="post" action="/Housekeeper/AddInventoryItem" class="sole-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="roomId" value="@room?.RoomId" />
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end;">
+            <div><label style="font-weight: 600;">Предмет</label><input name="itemName" required placeholder="Полотенце" /></div>
+            <div><label style="font-weight: 600;">Кол-во</label><input name="quantity" type="number" value="1" min="1" /></div>
+            <div>
+                <label style="font-weight: 600;">Категория</label>
+                <select name="category">
+                    <option value="Текстиль">Текстиль</option>
+                    <option value="Мебель">Мебель</option>
+                    <option value="Оборудование">Оборудование</option>
+                    <option value="Мини-бар">Мини-бар</option>
+                    <option value="Сантехника">Сантехника</option>
+                    <option value="Другое">Другое</option>
+                </select>
+            </div>
+            <div><button type="submit" class="btn-sole-mare-fill">+</button></div>
+        </div>
+    </form>
+</div>
+
+<table class="sole-table">
+    <thead>
+        <tr><th>Предмет</th><th>Кол-во</th><th>Категория</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                <tr>
+                    <td>@item.ItemName</td>
+                    <td>@item.ExpectedQuantity</td>
+                    <td>@item.Category</td>
+                    <td>
+                        <form method="post" action="/Housekeeper/DeleteInventoryItem" style="display: inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="itemId" value="@item.RoomInventoryId" />
+                            <input type="hidden" name="roomId" value="@room?.RoomId" />
+                            <button type="submit" class="table-action-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>

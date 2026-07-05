@@ -1,0 +1,52 @@
+﻿@model SoleMareHotel.Models.Booking
+
+@{
+    ViewData["Title"] = "Заселение гостя";
+}
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Заселение: @Model.BookingNumber</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <p><strong>Гость:</strong> @Model.Guest?.FullName</p>
+        <p><strong>Номер:</strong> @Model.Room?.RoomNumber (@Model.Room?.Category?.Name)</p>
+        <p><strong>Даты:</strong> @Model.CheckIn.ToString("dd.MM.yyyy") — @Model.CheckOut.ToString("dd.MM.yyyy")</p>
+
+        <hr style="margin: 20px 0;" />
+
+        <form method="post" class="sole-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="bookingId" value="@Model.BookingId" />
+
+            <h4 style="color: var(--navy); margin-bottom: 15px;">Документы гостя</h4>
+
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div>
+                    <label class="form-label">Идентификационный номер</label>
+                    <input name="identificationNumber" placeholder="123456789" />
+                </div>
+                <div>
+                    <label class="form-label">Номер паспорта / код паспорта</label>
+                    <input name="passportNumber" placeholder="1234567" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Контактный телефон <span style="color: #c0392b;">*</span></label>
+                <input name="phone" required placeholder="+3 800 123-45-67" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Адрес регистрации</label>
+                <input name="registrationAddress" placeholder="г. Минск, ул. Ленина, д. 1" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Дата рождения</label>
+                <input name="birthDate" type="date" />
+            </div>
+
+            <button type="submit" class="btn-sole-mare-fill" style="width: 100%;">Заселить гостя</button>
+        </form>
+    </div>
+</div>

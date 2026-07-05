@@ -1,0 +1,157 @@
+@model SoleMareHotel.Models.Booking
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Бронь " + Model.BookingNumber;
+}
+
+<div style="margin-bottom: 30px;">
+    <a href="/Bookings" style="color: var(--teal); text-decoration: none;">← Назад к бронированиям</a>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Бронь @Model.BookingNumber</h1>
+        <div class="gold-line"></div>
+    </div>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        @if (Model.Status != BookingStatus.Cancelled && Model.Status != BookingStatus.CheckedOut)
+        {
+            <a href="/GuestServiceOrders/Create?bookingId=@Model.BookingId" class="btn-sole-mare-fill">+ Добавить услугу</a>
+            <a href="/GuestServiceOrders/Index?bookingId=@Model.BookingId" class="btn-sole-mare">Лицевой счёт</a>
+        }
+        <a href="/Bookings/Edit/@Model.BookingId" class="btn-sole-mare">Изменить</a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+    <div class="sole-card">
+        <h3 style="color: var(--navy); margin: 0 0 15px 0;">Информация о брони</h3>
+        <p><strong>Статус:</strong>
+            @switch (Model.Status)
+            {
+                case BookingStatus.Booked: <span class="badge badge-booked">@Model.Status.GetDisplayName()</span> break;
+                case BookingStatus.Confirmed: <span class="badge badge-confirmed">@Model.Status.GetDisplayName()</span> break;
+                case BookingStatus.CheckedIn: <span class="badge badge-checkedin">@Model.Status.GetDisplayName()</span> break;
+                case BookingStatus.CheckedOut: <span class="badge badge-checkedout">@Model.Status.GetDisplayName()</span> break;
+                case BookingStatus.Cancelled: <span class="badge badge-cancelled">@Model.Status.GetDisplayName()</span> break;
+                default: @Model.Status.GetDisplayName() break;
+            }
+        </p>
+        <p><strong>Тип:</strong> @Model.BookingType.GetDisplayName()</p>
+        <p><strong>Заезд:</strong> @Model.CheckIn.ToString("dd.MM.yyyy HH:mm")</p>
+        <p><strong>Выезд:</strong> @Model.CheckOut.ToString("dd.MM.yyyy HH:mm")</p>
+        <p><strong>Гостей:</strong> @Model.NumberOfGuests (взр. @Model.Adults, дет. @Model.Children)</p>
+        @if (Model.BookingType == BookingType.Corporate)
+        {
+            <p><strong>Организация:</strong> @Model.Organization?.Name</p>
+            <p><strong>Контактное лицо:</strong> @Model.CompanyContactPerson</p>
+        }
+    </div>
+
+    <div class="sole-card">
+        <h3 style="color: var(--navy); margin: 0 0 15px 0;">Гость и номер</h3>
+        <p><strong>Гость:</strong> @Model.Guest?.FullName</p>
+        <p><strong>Телефон:</strong> @Model.Guest?.Phone</p>
+        <p><strong>Email:</strong> @Model.Guest?.Email</p>
+        <p><strong>Номер:</strong> @Model.Room?.RoomNumber (@Model.Room?.Category?.Name)</p>
+        <p><strong>Корпус:</strong> @Model.Room?.Location, этаж @Model.Room?.Floor</p>
+    </div>
+</div>
+
+<div class="sole-card" style="margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="color: var(--navy); margin: 0;">Проживание</h3>
+        <span style="font-size: 1.2rem; font-weight: bold; color: var(--navy);">@Model.CalculateTotalCost().ToString("N2") €</span>
+    </div>
+</div>
+
+<div class="sole-card" style="margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="color: var(--navy); margin: 0;">Услуги</h3>
+        @if (Model.Status != BookingStatus.Cancelled && Model.Status != BookingStatus.CheckedOut)
+        {
+            <a href="/GuestServiceOrders/Create?bookingId=@Model.BookingId" class="btn-sole-mare-fill" style="font-size: 0.85rem;">+ Добавить</a>
+        }
+    </div>
+    @if (Model.ServiceOrders != null && Model.ServiceOrders.Any())
+    {
+        <table class="sole-table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Услуга</th>
+                    <th>Кол-во</th>
+                    <th>Цена</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var o in Model.ServiceOrders.OrderByDescending(o => o.OrderDate))
+                {
+                    <tr>
+                        <td>@o.OrderDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@o.Service?.Name</td>
+                        <td>@o.Quantity</td>
+                        <td>@o.PriceCharged.ToString("N2") €</td>
+                        <td><strong>@o.TotalPrice.ToString("N2") €</strong></td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr style="background-color: var(--gold); color: var(--navy); font-weight: bold;">
+                    <td colspan="4" style="text-align: right;">Итого услуги:</td>
+                    <td>@Model.ServiceOrders.Sum(o => o.TotalPrice).ToString("N2") €</td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+    else
+    {
+        <p style="color: #999;">Услуг не добавлено</p>
+    }
+</div>
+
+<div class="sole-card" style="margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="color: var(--navy); margin: 0;">Оплаты</h3>
+    </div>
+    @if (Model.Payments != null && Model.Payments.Any())
+    {
+        <table class="sole-table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Способ</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model.Payments.OrderByDescending(p => p.PaymentDate))
+                {
+                    <tr>
+                        <td>@p.PaymentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@p.Method</td>
+                        <td><strong>@p.Amount.ToString("N2") €</strong></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p style="color: #999;">Оплат нет</p>
+    }
+</div>
+
+<div class="sole-card" style="background: var(--navy); color: white;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="margin: 0;">Итого к оплате</h3>
+        <div style="text-align: right;">
+            <div>Проживание: <strong>@Model.CalculateTotalCost().ToString("N2") €</strong></div>
+            <div>Услуги: <strong>@((Model.ServiceOrders?.Sum(o => o.TotalPrice) ?? 0).ToString("N2")) €</strong></div>
+            <div>Оплачено: <strong>@Model.CalculatePaidTotal().ToString("N2") €</strong></div>
+            <div style="font-size: 1.3rem; margin-top: 10px; color: var(--gold);">К доплате: <strong>@Model.CalculateRemainingDebt().ToString("N2") €</strong></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,100 @@
+@model SoleMareHotel.Models.Booking
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Оплата";
+    var debt = Model.CalculateRemainingDebt();
+    var fullCost = Model.CalculateFullCost();
+    var paidTotal = Model.CalculatePaidTotal();
+}
+
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <a href="/Bookings" style="color: var(--teal); text-decoration: none;">← Назад к бронированиям</a>
+    </div>
+
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Оплата: @Model.BookingNumber</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card" style="margin-bottom: 20px;">
+        <p><strong>Гость:</strong> @Model.Guest?.FullName @Model.Guest?.OrganizationName</p>
+        <p><strong>Номер:</strong> @Model.Room?.RoomNumber</p>
+        <hr style="margin: 15px 0;" />
+        <p><strong>Проживание:</strong> @Model.CalculateTotalCost().ToString("N2") €</p>
+        <p><strong>Доп. услуги:</strong> @(fullCost - Model.CalculateTotalCost()).ToString("N2") €</p>
+        <p><strong>Итого:</strong> @fullCost.ToString("N2") €</p>
+        <p><strong>Оплачено:</strong> @paidTotal.ToString("N2") €</p>
+        <p style="font-size: 1.2rem; color: @(debt > 0 ? "#c0392b" : "#27ae60");">
+            <strong>Задолженность: @debt.ToString("N2") €</strong>
+        </p>
+    </div>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="message-success">@TempData["Message"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="message-error">@TempData["Error"]</div>
+    }
+
+    @if (Model.Payments != null && Model.Payments.Any())
+    {
+        <div class="sole-card" style="margin-bottom: 20px;">
+            <h3 style="color: var(--navy); margin-bottom: 15px;">История оплат</h3>
+            <table class="sole-table">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Дата</th>
+                        <th>Сумма</th>
+                        <th>Способ</th>
+                        <th>Описание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model.Payments.OrderByDescending(p => p.PaymentDate))
+                    {
+                        <tr>
+                            <td>@p.PaymentNumber</td>
+                            <td>@p.PaymentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@p.Amount.ToString("N2") €</td>
+                            <td>@p.Method.GetDisplayName()</td>
+                            <td>@p.Description</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @if (debt > 0)
+    {
+        <div class="sole-card">
+            <h3 style="color: var(--navy); margin-bottom: 15px;">Принять оплату</h3>
+            <form asp-action="Create" method="post" class="sole-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="bookingId" value="@Model.BookingId" />
+                <div class="form-group">
+                    <label class="form-label">Сумма (макс. @debt.ToString("N2") €)</label>
+                    <input name="amount" type="number" step="0.01" min="0.01" max="@debt" required />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Способ оплаты</label>
+                    <select name="method" required>
+                        <option value="Cash">Наличные</option>
+                        <option value="Card">Банковская карта</option>
+                        <option value="BankTransfer">Безналичный расчёт</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <input name="description" placeholder="Оплата проживания" />
+                </div>
+                <button type="submit" class="btn-sole-mare-fill" style="width: 100%;">ПРИНЯТЬ ОПЛАТУ</button>
+            </form>
+        </div>
+    }
+</div>

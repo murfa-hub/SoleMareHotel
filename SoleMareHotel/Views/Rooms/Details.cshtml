@@ -1,0 +1,43 @@
+﻿@model SoleMareHotel.Models.Room
+
+@{
+    ViewData["Title"] = $"Номер {Model.RoomNumber}";
+}
+
+<div style="margin-bottom: 20px;">
+    <a href="/Rooms" style="color: var(--teal); text-decoration: none;">← Назад к номерам</a>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <div>
+        @if (!string.IsNullOrEmpty(Model.PhotoPath))
+        {
+                <img src="@Model.PhotoPath" style="width: 100%; max-height: 400px; object-fit: cover;" />
+        }
+        else
+        {
+                <div class="photo-placeholder" style="height: 400px;"></div>
+        }
+    </div>
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Номер @Model.RoomNumber</h1>
+        <div class="gold-line"></div>
+
+        <p style="font-size: 1.2rem; color: var(--gold); margin: 15px 0;"><strong>@Model.Category?.Name</strong></p>
+        <p style="font-size: 2rem; color: var(--navy); font-weight: bold;">@Model.PricePerNight.ToString("N2") € / сутки</p>
+
+        <dl class="detail-grid">
+            <dt>Этаж:</dt><dd>@Model.Floor</dd>
+            <dt>Расположение:</dt><dd>@Model.Location</dd>
+            <dt>Статус:</dt><dd><strong>@Model.Status.GetDisplayName()</strong></dd>
+            <dt>Вместимость:</dt><dd>@Model.Capacity чел.</dd>
+            <dt>Удобства:</dt><dd>@Model.AdditionalAmenities</dd>
+        </dl>
+
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+                <h3 style="color: var(--navy); margin-top: 20px;">Описание</h3>
+                <p style="color: #666; line-height: 1.8;">@Model.Description</p>
+        }
+    </div>
+</div>

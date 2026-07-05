@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Выручка за период";
+}
+
+<div style="margin-bottom: 20px;">
+    <a href="/Reports" style="color: var(--teal); text-decoration: none;">← Назад к отчётам</a>
+</div>
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Выручка за период</h1>
+    <div class="gold-line"></div>
+</div>
+
+<form method="get" class="filter-bar" style="margin-bottom: 30px;">
+    <div class="filter-group-date">
+        <label>С</label>
+        <input name="startDate" type="date" value="@ViewBag.StartDate" />
+    </div>
+    <div class="filter-group-date">
+        <label>По</label>
+        <input name="endDate" type="date" value="@ViewBag.EndDate" />
+    </div>
+    <div class="filter-actions">
+        <button type="submit" class="btn-sole-mare-fill">Показать</button>
+    </div>
+</form>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+    <div class="sole-card" style="text-align: center;">
+        <div style="font-size: 2rem; color: var(--gold); font-weight: bold;">@ViewBag.TotalRevenue.ToString("N2") €</div>
+        <div style="color: #666; margin-top: 5px;">Общая выручка</div>
+    </div>
+    <div class="sole-card" style="text-align: center;">
+        <div style="font-size: 2rem; color: var(--navy); font-weight: bold;">@ViewBag.TotalBookings</div>
+        <div style="color: #666; margin-top: 5px;">Бронирований</div>
+    </div>
+    <div class="sole-card" style="text-align: center;">
+        <div style="font-size: 2rem; color: var(--teal); font-weight: bold;">@ViewBag.TotalNights</div>
+        <div style="color: #666; margin-top: 5px;">Всего ночей</div>
+    </div>
+</div>
+
+<div style="display: flex; gap: 15px; margin-top: 20px;">
+    <a href="/Reports/ExportRevenueExcel?startDate=@ViewBag.StartDate&endDate=@ViewBag.EndDate" class="btn-sole-mare-fill">Скачать Excel</a>
+    <a href="/Reports/ExportRevenueWord?startDate=@ViewBag.StartDate&endDate=@ViewBag.EndDate" class="btn-sole-mare">Скачать Word</a>
+</div>

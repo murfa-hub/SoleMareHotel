@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Статистика горничных";
+    var stats = ViewBag.Stats as List<dynamic>;
+}
+
+<div style="margin-bottom: 20px;">
+    <h1 style="color: var(--navy); margin: 0;">Статистика горничных</h1>
+    <p style="color: #666;">Эффективность работы за период</p>
+    <div class="gold-line"></div>
+</div>
+
+<form method="get" class="filter-bar" style="margin-bottom: 20px;">
+    <div class="filter-group-date">
+        <label>С</label>
+        <input name="dateFrom" type="date" value="@ViewBag.DateFrom" />
+    </div>
+    <div class="filter-group-date">
+        <label>По</label>
+        <input name="dateTo" type="date" value="@ViewBag.DateTo" />
+    </div>
+    <div class="filter-actions">
+        <button type="submit" class="btn-sole-mare-fill">Показать</button>
+        <a href="/Housekeeper/Stats" class="btn-sole-mare">Сброс</a>
+    </div>
+</form>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px;">
+    <div class="sole-card" style="text-align: center; padding: 20px;">
+        <div style="font-size: 2rem; color: var(--navy); font-weight: bold;">@ViewBag.TotalTasks</div>
+        <div style="color: #666;">Всего уборок</div>
+    </div>
+    <div class="sole-card" style="text-align: center; padding: 20px;">
+        <div style="font-size: 2rem; color: #c0392b; font-weight: bold;">@ViewBag.TotalDeparture</div>
+        <div style="color: #666;">Выездных</div>
+    </div>
+    <div class="sole-card" style="text-align: center; padding: 20px;">
+        <div style="font-size: 2rem; color: var(--gold); font-weight: bold;">@ViewBag.TotalIntermediate</div>
+        <div style="color: #666;">Промежуточных</div>
+    </div>
+    <div class="sole-card" style="text-align: center; padding: 20px;">
+        <div style="font-size: 2rem; color: var(--teal); font-weight: bold;">@ViewBag.TotalUnscheduled</div>
+        <div style="color: #666;">Внеплановых</div>
+    </div>
+</div>
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>Горничная</th>
+            <th>Всего</th>
+            <th>Выездных</th>
+            <th>Промеж.</th>
+            <th>Внеплан.</th>
+            <th>С пробл.</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (stats != null)
+        {
+            foreach (var s in stats)
+            {
+                <tr>
+                    <td>@s.Housekeeper</td>
+                    <td><strong>@s.Total</strong></td>
+                    <td>@s.Departure</td>
+                    <td>@s.Intermediate</td>
+                    <td>@s.Unscheduled</td>
+                    <td>@(s.Issues > 0 ? s.Issues.ToString() : "0")</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

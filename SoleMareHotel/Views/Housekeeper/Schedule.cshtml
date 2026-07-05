@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "График плановых уборок";
+    var schedule = ViewBag.Schedule as SoleMareHotel.Models.CleaningSchedule;
+    var roomsDue = ViewBag.RoomsDue as List<SoleMareHotel.Models.Room>;
+    var housekeepers = ViewBag.Housekeepers as List<SoleMareHotel.Models.ApplicationUser>;
+}
+
+<div style="margin-bottom: 20px;">
+    <h1 style="color: var(--navy); margin: 0;">График плановых уборок</h1>
+    <p style="color: #666;">Промежуточная уборка занятых номеров</p>
+    <div class="gold-line"></div>
+</div>
+
+<div class="sole-card" style="margin-bottom: 20px;">
+    <p><strong>Интервал:</strong> каждые @schedule?.IntervalDays дн.</p>
+    <p><strong>Последний запуск:</strong> @(schedule?.LastRun?.ToString("dd.MM.yyyy HH:mm") ?? "никогда")</p>
+    <p><strong>Номеров к уборке:</strong> @roomsDue?.Count</p>
+</div>
+
+@if (roomsDue != null && roomsDue.Any())
+{
+        <table class="sole-table" style="margin-bottom: 20px;">
+            <thead><tr><th>Номер</th><th>Категория</th><th>Этаж</th></tr></thead>
+            <tbody>
+            @foreach (var room in roomsDue)
+            {
+                        <tr>
+                            <td>@room.RoomNumber</td>
+                            <td>@room.Category?.Name</td>
+                            <td>@room.Floor</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+
+        <div class="sole-card">
+            <h4 style="color: var(--navy); margin-bottom: 15px;">Создать задания по графику</h4>
+            <form method="post" action="/Housekeeper/GenerateScheduleTasks" class="sole-form">
+                @Html.AntiForgeryToken()
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600;">Назначить горничную</label>
+                    <select name="assignedTo" required>
+                        <option value="">-- Выберите --</option>
+                    @if (housekeepers != null)
+                    {
+                        foreach (var hk in housekeepers)
+                        {
+                                        <option value="@hk.Email">@hk.FullName</option>
+                        }
+                    }
+                    </select>
+                </div>
+                <button type="submit" class="btn-sole-mare-fill">Создать задания по графику</button>
+            </form>
+        </div>
+}
+else
+{
+        <div class="sole-card" style="text-align: center; padding: 40px;">
+            <p style="color: #27ae60;">Все занятые номера убраны по графику.</p>
+        </div>
+}

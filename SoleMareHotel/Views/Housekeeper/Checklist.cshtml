@@ -1,0 +1,105 @@
+@model IEnumerable<SoleMareHotel.Models.RoomInventory>
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Чек-лист инвентаризации";
+    var room = ViewBag.Room as Room;
+    var taskId = ViewBag.TaskId as int?;
+}
+
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        @if (taskId.HasValue)
+        {
+            <a href="/Housekeeper/Tasks" style="color: var(--teal); text-decoration: none;">← Назад к заданиям</a>
+        }
+        else
+        {
+            <a href="/Housekeeper/AllTasks" style="color: var(--teal); text-decoration: none;">← Назад к заданиям</a>
+        }
+    </div>
+
+    <div class="sole-card">
+        <h2 style="color: var(--navy); margin: 0 0 10px 0;">Чек-лист: Номер @room?.RoomNumber</h2>
+        <p style="color: var(--gold);">@room?.Category?.Name</p>
+        <div class="gold-line" style="margin-bottom: 20px;"></div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <p style="color: #666;">Опись имущества для этого номера не создана.</p>
+        }
+        else
+        {
+            var categories = Model.GroupBy(i => i.Category ?? "Прочее").OrderBy(g => g.Key);
+
+            <form method="post" action="/Housekeeper/Checklist" class="sole-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="roomId" value="@room?.RoomId" />
+                @if (taskId.HasValue)
+                {
+                    <input type="hidden" name="taskId" value="@taskId" />
+                }
+
+                @foreach (var category in categories)
+                {
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--navy); margin-bottom: 12px; border-bottom: 2px solid var(--gold); padding-bottom: 6px;">@category.Key</h4>
+
+                        @foreach (var item in category)
+                        {
+                            <div style="display: grid; grid-template-columns: 1fr 80px 80px 50px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+                                <div>
+                                    <input type="hidden" name="itemNames" value="@item.ItemName" />
+                                    <span style="font-weight: 600;">@item.ItemName</span>
+                                </div>
+                                <div>
+                                    <input type="hidden" name="expectedQty" value="@item.ExpectedQuantity" />
+                                    <span style="color: #666; font-size: 0.85rem;">Ожид: @item.ExpectedQuantity</span>
+                                </div>
+                                <div>
+                                    <input type="number" name="actualQty" value="@item.ExpectedQuantity" min="0" max="999"
+                                           style="width: 70px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;"
+                                           onchange="updateItemStatus(this)" />
+                                </div>
+                                <div>
+                                    <input type="checkbox" name="itemOk" value="true" checked
+                                           style="width: 20px; height: 20px; cursor: pointer;"
+                                           onchange="toggleAllOk()" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight: 600;">Замечания (необязательно)</label>
+                    <textarea name="notes" rows="3" placeholder="Опишите обнаруженные проблемы..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-sole-mare-fill" style="width: 100%;">Сохранить чек-лист</button>
+            </form>
+        }
+    </div>
+</div>
+
+<script>
+    function toggleAllOk() {
+        var checkboxes = document.querySelectorAll('input[name="itemOk"]');
+        var allChecked = true;
+        checkboxes.forEach(function(cb) {
+            if (!cb.checked) allChecked = false;
+        });
+    }
+
+    function updateItemStatus(input) {
+        var row = input.closest('div[style*="grid"]');
+        if (row) {
+            var expected = parseInt(row.querySelector('input[name="expectedQty"]')?.value || '0');
+            var actual = parseInt(input.value || '0');
+            var checkbox = row.querySelector('input[name="itemOk"]');
+            if (checkbox) {
+                checkbox.checked = (actual === expected);
+            }
+        }
+    }
+</script>

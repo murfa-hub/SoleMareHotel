@@ -1,0 +1,80 @@
+@model IEnumerable<SoleMareHotel.Models.RoomChecklist>
+
+@{
+    ViewData["Title"] = "Чек-листы инвентаризации";
+    var rooms = ViewBag.Rooms as List<SoleMareHotel.Models.Room>;
+    var housekeepers = ViewBag.Housekeepers as List<SoleMareHotel.Models.ApplicationUser>;
+}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Чек-листы инвентаризации</h1>
+        <div class="gold-line"></div>
+    </div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div style="background-color: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-left: 4px solid #155724;">@TempData["Message"]</div>
+}
+
+<form method="get" style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+    <select name="roomId" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        <option value="">Все номера</option>
+        @if (rooms != null)
+        {
+            @foreach (var r in rooms)
+            {
+                <option value="@r.RoomId" selected="@(ViewBag.SelectedRoom?.ToString() == r.RoomId.ToString())">@r.RoomNumber</option>
+            }
+        }
+    </select>
+    <select name="housekeeper" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        <option value="">Все горничные</option>
+        @if (housekeepers != null)
+        {
+            @foreach (var h in housekeepers)
+            {
+                <option value="@h.UserName" selected="@(ViewBag.SelectedHousekeeper?.ToString() == h.UserName)">@h.FullName</option>
+            }
+        }
+    </select>
+    <button type="submit" class="btn-sole-mare">Фильтр</button>
+</form>
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Горничная</th>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th>Замечания</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Room?.RoomNumber</td>
+                <td>@item.HousekeeperName</td>
+                <td>@item.CheckDate.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>
+                    @if (item.AllItemsOk)
+                    {
+                        <span class="badge badge-free">Все в порядке</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-repair">Есть замечания</span>
+                    }
+                </td>
+                <td>@(item.Notes ?? "—")</td>
+                <td>
+                    <a href="/Housekeeper/ChecklistDetails/@item.RoomChecklistId" class="table-action">Подробнее</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

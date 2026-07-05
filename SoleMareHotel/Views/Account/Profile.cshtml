@@ -1,0 +1,194 @@
+﻿@using SoleMareHotel.Models
+@{
+    ViewData["Title"] = "Личный кабинет";
+    var user = ViewBag.User as SoleMareHotel.Models.ApplicationUser;
+    var guest = ViewBag.Guest as SoleMareHotel.Models.Guest;
+    var activeTab = ViewBag.ActiveTab as string ?? "profile";
+    var bookings = ViewBag.Bookings as IEnumerable<SoleMareHotel.Models.Booking>;
+    var requests = ViewBag.Requests as IEnumerable<SoleMareHotel.Models.BookingRequest>;
+
+    var fullName = user?.FullName ?? guest?.FullName ?? "Гость";
+    var nameParts = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+    var firstName = nameParts.Length > 0 ? nameParts[0] : "Гость";
+    if (firstName.Contains("@") && nameParts.Length > 1)
+        firstName = nameParts[1];
+    var initial = firstName.Substring(0, 1).ToUpper();
+
+    var isStaff = User.IsInRole("Admin") || User.IsInRole("Receptionist") || User.IsInRole("Housekeeper");
+    var isGuest = User.IsInRole("Guest");
+}
+
+<div style="max-width: 900px; margin: 0 auto;">
+
+    <div class="sole-card" style="margin-bottom: 0; border-bottom: none;">
+        <div style="display: flex; align-items: center; gap: 25px;">
+            <div style="width: 90px; height: 90px; background: linear-gradient(135deg, #002B5B, #2B7A78); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; font-family: 'Playfair Display', serif; flex-shrink: 0;">
+                @initial
+            </div>
+            <div>
+                <h1 style="color: var(--navy); margin: 0; font-size: 1.8rem;">@fullName</h1>
+                <p style="color: #666; margin: 5px 0;">@user?.Email</p>
+                <p style="color: var(--gold); margin: 0; font-size: 0.9rem;">
+                    @if (User.IsInRole("Admin")) { <span>Администрация отеля</span> }
+                    else if (User.IsInRole("Receptionist")) { <span>Администратор ресепшена</span> }
+                    else if (User.IsInRole("Housekeeper")) { <span>Горничная</span> }
+                    else { <span>Гость отеля</span> }
+                </p>
+            </div>
+        </div>
+    </div>
+
+    @if (isGuest)
+    {
+        <div style="display: flex; gap: 0; margin-bottom: 0; background: white; border-top: 1px solid #eee;">
+            <a href="/Account/Profile?tab=profile" style="padding: 15px 25px; text-decoration: none; color: @(activeTab == "profile" ? "var(--navy)" : "#999"); font-weight: @(activeTab == "profile" ? "600" : "400"); border-bottom: 3px solid @(activeTab == "profile" ? "var(--gold)" : "transparent"); font-size: 0.85rem;">Профиль</a>
+            <a href="/Account/Profile?tab=bookings" style="padding: 15px 25px; text-decoration: none; color: @(activeTab == "bookings" ? "var(--navy)" : "#999"); font-weight: @(activeTab == "bookings" ? "600" : "400"); border-bottom: 3px solid @(activeTab == "bookings" ? "var(--gold)" : "transparent"); font-size: 0.85rem;">Брони</a>
+            <a href="/Account/Profile?tab=requests" style="padding: 15px 25px; text-decoration: none; color: @(activeTab == "requests" ? "var(--navy)" : "#999"); font-weight: @(activeTab == "requests" ? "600" : "400"); border-bottom: 3px solid @(activeTab == "requests" ? "var(--gold)" : "transparent"); font-size: 0.85rem;">Заявки</a>
+        </div>
+    }
+
+    <div class="sole-card" style="border-top: none; margin-top: 0;">
+        @if (TempData["ProfileMessage"] != null)
+        {
+            <div class="message-success">@TempData["ProfileMessage"]</div>
+        }
+
+        @if (activeTab == "profile")
+        {
+            <form method="post" class="sole-form">
+                <h3 style="color: var(--navy); margin-bottom: 20px;">Личные данные</h3>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input value="@user?.Email" disabled style="background: #f5f5f5;" />
+                    <small style="color: #999;">Email изменить нельзя</small>
+                </div>
+
+                <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label class="form-label">Фамилия</label>
+                        <input name="lastName" value="@(nameParts.Length > 0 ? nameParts[0] : "")" />
+                    </div>
+                    <div>
+                        <label class="form-label">Имя</label>
+                        <input name="firstName" value="@(nameParts.Length > 1 ? nameParts[1] : "")" />
+                    </div>
+                    <div>
+                        <label class="form-label">Отчество</label>
+                        <input name="middleName" value="@(nameParts.Length > 2 ? nameParts[2] : "")" />
+                    </div>
+                </div>
+
+                @if (isGuest)
+                {
+                    <div class="form-group">
+                        <label class="form-label">Телефон</label>
+                        <input name="phone" value="@guest?.Phone" placeholder="+3 800 123-45-67" />
+                    </div>
+                }
+
+                <button type="submit" class="btn-sole-mare-fill">СОХРАНИТЬ</button>
+            </form>
+        }
+        else if (activeTab == "bookings")
+        {
+            <h3 style="color: var(--navy); margin-bottom: 15px;">Мои бронирования</h3>
+            @if (bookings != null && bookings.Any())
+            {
+                <table class="sole-table">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Номер</th>
+                            <th>Заезд</th>
+                            <th>Выезд</th>
+                            <th>Статус</th>
+                            <th>Стоимость</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var b in bookings)
+                        {
+                            <tr>
+                                <td>@b.BookingNumber</td>
+                                <td>@b.Room?.RoomNumber (@b.Room?.Category?.Name)</td>
+                                <td>@b.CheckIn.ToString("dd.MM.yyyy")</td>
+                                <td>@b.CheckOut.ToString("dd.MM.yyyy")</td>
+                                <td>@switch (b.Status)
+                                    {
+                                        case BookingStatus.Booked: <span class="badge badge-booked">@b.Status.GetDisplayName()</span> break;
+                                        case BookingStatus.Confirmed: <span class="badge badge-confirmed">@b.Status.GetDisplayName()</span> break;
+                                        case BookingStatus.CheckedIn: <span class="badge badge-checkedin">@b.Status.GetDisplayName()</span> break;
+                                        case BookingStatus.CheckedOut: <span class="badge badge-checkedout">@b.Status.GetDisplayName()</span> break;
+                                        case BookingStatus.Cancelled: <span class="badge badge-cancelled">@b.Status.GetDisplayName()</span> break;
+                                        default: @b.Status.GetDisplayName() break;
+                                    }
+                                </td>
+                                <td><strong>@b.CalculateFullCost().ToString("N2") €</strong></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div style="text-align: center; padding: 30px; color: #666;">
+                    <p>У вас пока нет бронирований.</p>
+                    <a href="/Rooms/Catalog" class="btn-sole-mare-fill" style="display: inline-block; margin-top: 10px;">Найти номер</a>
+                </div>
+            }
+        }
+        else if (activeTab == "requests")
+        {
+            <h3 style="color: var(--navy); margin-bottom: 15px;">Мои заявки</h3>
+            @if (requests != null && requests.Any())
+            {
+                <table class="sole-table">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Номер</th>
+                            <th>Заезд</th>
+                            <th>Выезд</th>
+                            <th>Гостей</th>
+                            <th>Статус</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in requests)
+                        {
+                            <tr>
+                                <td>@r.RequestNumber</td>
+                                <td>@r.Room?.RoomNumber (@r.Room?.Category?.Name)</td>
+                                <td>@r.CheckIn.ToString("dd.MM.yyyy")</td>
+                                <td>@r.CheckOut.ToString("dd.MM.yyyy")</td>
+                                <td>@r.Guests</td>
+                                <td>@switch (r.Status)
+                                    {
+                                        case RequestStatus.New: <span class="badge badge-new">@r.Status.GetDisplayName()</span> break;
+                                        case RequestStatus.Confirmed: <span class="badge badge-confirmed">@r.Status.GetDisplayName()</span> break;
+                                        case RequestStatus.Rejected: <span class="badge badge-rejected">@r.Status.GetDisplayName()</span> break;
+                                        default: @r.Status.GetDisplayName() break;
+                                    }
+                                </td>
+                                <td>@r.CreatedAt.ToString("dd.MM.yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div style="text-align: center; padding: 30px; color: #666;">
+                    <p>У вас пока нет заявок.</p>
+                    <a href="/Rooms/Catalog" class="btn-sole-mare-fill" style="display: inline-block; margin-top: 10px;">Найти номер</a>
+                </div>
+            }
+        }
+
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
+            <a href="/Account/Logout" style="color: #c0392b; text-decoration: none; font-weight: 600;">Выйти из аккаунта</a>
+        </div>
+    </div>
+</div>

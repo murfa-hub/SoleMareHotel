@@ -1,0 +1,84 @@
+@model SoleMareHotel.Models.Organization
+
+@{
+    ViewData["Title"] = "Новая организация";
+}
+
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <a href="/Organizations" style="color: var(--teal); text-decoration: none;">← Назад к списку</a>
+        <h1 style="color: var(--navy); margin: 10px 0 0 0;">Регистрация организации</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <form asp-action="Create" class="sole-form">
+            <div asp-validation-summary="All" style="color: #c0392b; margin-bottom: 20px;"></div>
+
+            <h3 style="color: var(--navy); margin-bottom: 15px;">Основные данные</h3>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Наименование организации *</label>
+                <input asp-for="Name" required placeholder="ООО «Ромашка»" />
+            </div>
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">ИНН</label>
+                    <input asp-for="INN" placeholder="123456789" />
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">ОГРН</label>
+                    <input asp-for="OGRN" placeholder="1001234567890" />
+                </div>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Юридический адрес</label>
+                <input asp-for="LegalAddress" placeholder="г. Минск, ул. Притыцкого, д. 60" />
+            </div>
+
+            <h3 style="color: var(--navy); margin-bottom: 15px;">Контактное лицо</h3>
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">ФИО</label>
+                    <input asp-for="ContactPersonName" placeholder="Иванов Иван Иванович" />
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Должность</label>
+                    <input asp-for="ContactPersonPosition" placeholder="Директор" />
+                </div>
+            </div>
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Телефон</label>
+                    <input asp-for="ContactPersonPhone" placeholder="+3 7529 123-45-67" />
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Email</label>
+                    <input asp-for="ContactPersonEmail" type="email" placeholder="ivanov@romashka.by" />
+                </div>
+            </div>
+
+            <h3 style="color: var(--navy); margin-bottom: 15px;">Договор</h3>
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Номер договора</label>
+                    <input asp-for="ContractNumber" placeholder="Д-2026-001" />
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Дата договора</label>
+                    <input asp-for="ContractDate" type="date" />
+                </div>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                    <input asp-for="IsActive" checked />
+                    <span>Договор действует</span>
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" class="btn-sole-mare-fill">СОХРАНИТЬ</button>
+                <a href="/Organizations" class="btn-sole-mare">ОТМЕНА</a>
+            </div>
+        </form>
+    </div>
+</div>

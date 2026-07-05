@@ -1,0 +1,129 @@
+﻿@model SoleMareHotel.Models.Booking
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Новое бронирование";
+}
+
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Новое бронирование</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <form asp-action="Create" class="sole-form">
+            <div asp-validation-summary="All" style="color: #c0392b; margin-bottom: 20px;"></div>
+
+            <div style="margin-bottom: 20px; background: #f8f6f0; padding: 20px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 10px; font-size: 1rem;">Тип бронирования</label>
+                <div style="display: flex; gap: 20px;">
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                        <input type="radio" name="BookingType" value="@((int)BookingType.Individual)" checked onchange="toggleCorporateFields()" />
+                        <span>🏨 @BookingType.Individual.GetDisplayName()</span>
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                        <input type="radio" name="BookingType" value="@((int)BookingType.Corporate)" onchange="toggleCorporateFields()" />
+                        <span>🏢 @BookingType.Corporate.GetDisplayName()</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="corporateFields" style="display: none;">
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Организация *</label>
+                    <select name="OrganizationId">
+                        <option value="">-- Выберите организацию --</option>
+                        @foreach (var org in ViewBag.Organizations)
+                        {
+                            <option value="@org.OrganizationId">@org.Name (@(org.ContractNumber ?? "без договора"))</option>
+                        }
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Контактное лицо организации</label>
+                    <input name="CompanyContactPerson" placeholder="ФИО, должность" />
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Телефон организации</label>
+                    <input name="CompanyPhone" placeholder="+3 800 123-45-67" />
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Список сотрудников (через запятую)</label>
+                    <textarea name="EmployeeList" rows="2" placeholder="Иванов И.И., Петров П.П."></textarea>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" name="IsCompanyGuarantor" value="true" />
+                        <span>Организация — гарант оплаты</span>
+                    </label>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Гость</label>
+                <select asp-for="GuestId" required>
+                    <option value="">-- Выберите гостя --</option>
+                    @foreach (var guest in ViewBag.Guests)
+                    {
+                            <option value="@guest.GuestId">@guest.FullName @guest.OrganizationName</option>
+                    }
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Номер</label>
+                <select asp-for="RoomId" required>
+                    <option value="">-- Выберите номер --</option>
+                    @foreach (var room in ViewBag.Rooms)
+                    {
+                            <option value="@room.RoomId">@room.RoomNumber — @room.Category?.Name (до @room.Capacity чел., @room.PricePerNight.ToString("N2") €/сут.)</option>
+                    }
+                </select>
+            </div>
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Дата заезда</label>
+                    <input asp-for="CheckIn" type="datetime-local" required />
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Дата выезда</label>
+                    <input asp-for="CheckOut" type="datetime-local" required />
+                </div>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Количество гостей</label>
+                <input asp-for="NumberOfGuests" type="number" required min="1" value="1" />
+            </div>
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Взрослых</label>
+                    <input asp-for="Adults" type="number" required min="1" value="1" />
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; display: block; margin-bottom: 5px;">Детей</label>
+                    <input asp-for="Children" type="number" min="0" value="0" />
+                </div>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Статус</label>
+                <select asp-for="Status" required>
+                    <option value="@((int)BookingStatus.Booked)">Забронировано</option>
+                    <option value="@((int)BookingStatus.Confirmed)">Подтверждено</option>
+                    <option value="@((int)BookingStatus.CheckedIn)">Заселено</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" class="btn-sole-mare-fill">СОХРАНИТЬ</button>
+                <a href="/Bookings" class="btn-sole-mare">ОТМЕНА</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleCorporateFields() {
+        var corporate = document.querySelector('input[name="BookingType"]:checked').value === '@((int)BookingType.Corporate)';
+        document.getElementById('corporateFields').style.display = corporate ? 'block' : 'none';
+    }
+    document.addEventListener('DOMContentLoaded', toggleCorporateFields);
+</script>

@@ -1,0 +1,119 @@
+﻿@model IEnumerable<SoleMareHotel.Models.Room>
+
+@{
+    ViewData["Title"] = "Каталог номеров";
+}
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Выбор номера</h1>
+    <div class="gold-line"></div>
+</div>
+
+@if (TempData["Error"] != null)
+{
+        <div class="message-error">@TempData["Error"]</div>
+}
+
+<div style="background: #f8f6f0; padding: 20px; margin-bottom: 30px;">
+    <form method="get">
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Категория</label>
+                <select name="categoryId">
+                    <option value="">Все</option>
+                    @foreach (var cat in ViewBag.Categories)
+                    {
+                        <option value="@cat.RoomCategoryId" selected="@(ViewBag.SelectedCategory == cat.RoomCategoryId ? "selected" : null)">@cat.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Цена от (€)</label>
+                <input name="minPrice" type="number" value="@ViewBag.MinPrice" placeholder="0" />
+            </div>
+            <div class="filter-group">
+                <label>Цена до (€)</label>
+                <input name="maxPrice" type="number" value="@ViewBag.MaxPrice" placeholder="1000" />
+            </div>
+            <div class="filter-group" style="min-width: 90px;">
+                <label>Гостей</label>
+                <input name="capacity" type="number" value="@ViewBag.Capacity" placeholder="1" />
+            </div>
+            <div class="filter-group-date">
+                <label>Заезд</label>
+                <input name="dateFrom" type="date" value="@ViewBag.DateFrom" />
+            </div>
+            <div class="filter-group-date">
+                <label>Выезд</label>
+                <input name="dateTo" type="date" value="@ViewBag.DateTo" />
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn-sole-mare-fill" style="padding: 10px 20px;">НАЙТИ</button>
+                <a href="/Rooms/Catalog" class="btn-sole-mare" style="padding: 10px 20px;">СБРОС</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;">
+    @foreach (var item in Model)
+    {
+            <div class="sole-card" style="overflow: hidden;">
+            @if (!string.IsNullOrEmpty(item.PhotoPath))
+            {
+                        <img src="@item.PhotoPath" style="width: 100%; height: 200px; object-fit: cover; display: block;" />
+            }
+            else
+            {
+                        <div class="photo-placeholder"></div>
+            }
+
+                <div style="padding: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                        <div>
+                            <h3 style="color: var(--navy); margin: 0; font-size: 1.1rem;">Номер @item.RoomNumber</h3>
+                            <p style="color: var(--gold); margin: 3px 0 0 0; font-size: 0.85rem;">@item.Category?.Name</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="font-size: 1.2rem; color: var(--navy); font-weight: bold; margin: 0;">@item.PricePerNight.ToString("N0") €</p>
+                            <p style="color: #666; font-size: 0.7rem; margin: 0;">за сутки</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 15px; margin-bottom: 12px; color: #666; font-size: 0.85rem; flex-wrap: wrap;">
+                        <span>👤 до @item.Capacity чел.</span>
+                        <span>🏢 Этаж @item.Floor</span>
+                    @if (!string.IsNullOrEmpty(item.Location))
+                    {
+                                <span>📍 @item.Location</span>
+                    }
+                    </div>
+                @if (!string.IsNullOrEmpty(item.Description))
+                {
+                            <p style="color: #666; font-size: 0.85rem; margin-bottom: 15px; line-height: 1.5;">
+                        @(item.Description.Length > 80 ? item.Description.Substring(0, 80) + "..." : item.Description)
+                            </p>
+                }
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                            <a href="/Bookings/GuestBook?roomId=@item.RoomId" class="btn-sole-mare-fill" style="display: block; text-align: center; padding: 12px; text-decoration: none;">
+                                ЗАБРОНИРОВАТЬ
+                            </a>
+                }
+                else
+                {
+                            <a href="/Account/Login" class="btn-sole-mare-fill" style="display: block; text-align: center; padding: 12px; text-decoration: none;">
+                                ВОЙТИ И ЗАБРОНИРОВАТЬ
+                            </a>
+                }
+                </div>
+            </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+        <div class="sole-card" style="text-align: center; padding: 40px;">
+            <p style="color: #666; font-size: 1.1rem;">Нет доступных номеров по заданным фильтрам.</p>
+            <a href="/Rooms/Catalog" class="btn-sole-mare" style="display: inline-block; margin-top: 10px;">СБРОСИТЬ ФИЛЬТРЫ</a>
+        </div>
+}

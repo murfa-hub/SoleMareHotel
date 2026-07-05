@@ -1,0 +1,72 @@
+@model IEnumerable<SoleMareHotel.Models.Organization>
+
+@{
+    ViewData["Title"] = "Корпоративные клиенты";
+}
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Корпоративные клиенты</h1>
+    <div class="gold-line"></div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="message-success">@TempData["Message"]</div>
+}
+
+<div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
+    <form method="get" style="display: flex; gap: 10px; flex: 1;">
+        <input type="text" name="search" value="@ViewBag.Search" placeholder="Поиск по названию, ИНН, контактному лицу..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+        <button type="submit" class="btn-sole-mare">Найти</button>
+    </form>
+    <a href="/Organizations/Create" class="btn-sole-mare-fill">+ Добавить организацию</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="sole-card" style="text-align: center; padding: 40px;">
+        <p style="color: #666;">Организации не найдены.</p>
+    </div>
+}
+else
+{
+    <table class="sole-table">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>ИНН</th>
+                <th>Контактное лицо</th>
+                <th>Телефон</th>
+                <th>Договор</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>@item.Name</strong></td>
+                    <td>@item.INN</td>
+                    <td>@item.ContactPersonName<br /><small>@item.ContactPersonPosition</small></td>
+                    <td>@item.ContactPersonPhone</td>
+                    <td>@item.ContractNumber<br /><small>@item.ContractDate?.ToString("dd.MM.yyyy")</small></td>
+                    <td>
+                        @if (item.IsActive)
+                        {
+                            <span class="badge badge-confirmed">Активен</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-rejected">Неактивен</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="/Organizations/Details/@item.OrganizationId" class="table-action">Подробнее</a>
+                        <a href="/Organizations/Edit/@item.OrganizationId" class="table-action-gold">Изменить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

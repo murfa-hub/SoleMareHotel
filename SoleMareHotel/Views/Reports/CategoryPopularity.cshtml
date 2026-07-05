@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Популярность категорий";
+}
+
+<div style="margin-bottom: 20px;">
+    <a href="/Reports" style="color: var(--teal); text-decoration: none;">← Назад к отчётам</a>
+</div>
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Популярность категорий номеров</h1>
+    <div class="gold-line"></div>
+</div>
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>Категория</th>
+            <th>Кол-во номеров</th>
+            <th>Кол-во броней</th>
+            <th>Выручка</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (dynamic item in ViewBag.Categories)
+        {
+                <tr>
+                    <td>@item.Category.Name</td>
+                    <td>@item.RoomCount</td>
+                    <td>@item.BookingCount</td>
+                    <td>@item.TotalRevenue.ToString("N2") €</td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    <a href="/Reports/ExportCategoryExcel" class="btn-sole-mare-fill">Скачать Excel</a>
+</div>

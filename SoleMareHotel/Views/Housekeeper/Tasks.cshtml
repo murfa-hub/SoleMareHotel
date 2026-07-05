@@ -1,0 +1,79 @@
+﻿@model IEnumerable<SoleMareHotel.Models.CleaningTask>
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Мои задания";
+}
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">Сменное задание</h1>
+    <p style="color: #666;">Список номеров на уборку</p>
+    <div class="gold-line"></div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+        <div class="message-success">@TempData["Message"]</div>
+}
+
+@if (!Model.Any())
+{
+        <div class="sole-card" style="text-align: center; padding: 40px;">
+            <p style="color: #666;">Нет активных заданий.</p>
+        </div>
+}
+else
+{
+        <table class="sole-table">
+            <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Тип уборки</th>
+                    <th>Статус</th>
+                    <th>Особые отметки</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var task in Model)
+            {
+                        <tr>
+                            <td>@task.Room?.RoomNumber (@task.Room?.Category?.Name)</td>
+                            <td>
+                        @switch (task.CleaningType)
+                        {
+                            case CleaningType.Departure: <span class="badge badge-departure">@task.CleaningType.GetDisplayName()</span> break;
+                            case CleaningType.Intermediate: <span class="badge badge-intermediate">@task.CleaningType.GetDisplayName()</span> break;
+                            case CleaningType.Unscheduled: <span class="badge badge-unscheduled">@task.CleaningType.GetDisplayName()</span> break;
+                            default: <span class="badge badge-free">@task.CleaningType.GetDisplayName()</span> break;
+                        }
+                            </td>
+                            <td>
+                        @switch (task.Status)
+                        {
+                            case CleaningTaskStatus.Assigned: <span class="badge badge-assigned">@task.Status.GetDisplayName()</span> break;
+                            case CleaningTaskStatus.InProgress: <span class="badge badge-inprogress">@task.Status.GetDisplayName()</span> break;
+                            case CleaningTaskStatus.Completed: <span class="badge badge-completed">@task.Status.GetDisplayName()</span> break;
+                            default: @task.Status.GetDisplayName() break;
+                        }
+                            </td>
+                            <td>@task.Notes</td>
+                            <td>
+                        @if (task.Status == CleaningTaskStatus.Assigned)
+                        {
+                                        <form method="post" action="/Housekeeper/StartTask" style="display: inline;">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="taskId" value="@task.CleaningTaskId" />
+                                            <button type="submit" style="background: none; border: none; color: var(--navy); cursor: pointer; font-weight: 600;">Начать</button>
+                                        </form>
+                        }
+                        @if (task.Status == CleaningTaskStatus.InProgress)
+                        {
+                                        <a href="/Housekeeper/CompleteTask?taskId=@task.CleaningTaskId" class="table-action-success">Завершить</a>
+                        }
+                            </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}

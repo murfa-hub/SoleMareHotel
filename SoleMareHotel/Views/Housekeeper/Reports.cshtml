@@ -1,0 +1,105 @@
+﻿@model IEnumerable<SoleMareHotel.Models.CleaningReport>
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Отчёты горничных";
+}
+
+<div style="margin-bottom: 20px;">
+    <h1 style="color: var(--navy); margin: 0;">Отчёты горничных</h1>
+    <p style="color: #666;">Акты о повреждениях и результатах уборки</p>
+    <div class="gold-line"></div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+        <div class="message-success">@TempData["Message"]</div>
+}
+
+@if (!Model.Any())
+{
+        <div class="sole-card" style="text-align: center; padding: 40px;">
+            <p style="color: #666;">Нет отчётов.</p>
+        </div>
+}
+else
+{
+        <table class="sole-table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Номер</th>
+                    <th>Тип уборки</th>
+                    <th>Горничная</th>
+                    <th>Имущество</th>
+                    <th>Ремонт</th>
+                    <th>Описание</th>
+                    <th>Фото</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var report in Model)
+            {
+                        <tr>
+                            <td style="white-space: nowrap;">@report.ReportDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@report.Room?.RoomNumber</td>
+                            <td>@report.CleaningTask?.CleaningType.GetDisplayName()</td>
+                            <td>@report.ReportedBy</td>
+                            <td>
+                        @if (report.InventoryOk)
+                        {
+                            <span style="color: #27ae60;">OK</span>
+                        }
+                        else
+                        {
+                            <span style="color: #c0392b; font-weight: 600;">Повреждения</span>
+                        }
+                            </td>
+                            <td>
+                        @if (report.NeedsRepair)
+                        {
+                            <span style="color: #c0392b; font-weight: 600;">Да</span>
+                        }
+                        else
+                        {
+                            <span>Нет</span>
+                        }
+                            </td>
+                            <td>
+                        @if (!string.IsNullOrEmpty(report.IssueDescription))
+                        {
+                            @report.IssueDescription
+                        }
+                        @if (!string.IsNullOrEmpty(report.RepairDescription))
+                        {
+                            <br/>
+
+                            <small style="color: #666;">@report.RepairDescription</small>
+                        }
+                            </td>
+                            <td>
+                        @if (!string.IsNullOrEmpty(report.PhotoPath))
+                        {
+                            <a href="@report.PhotoPath" target="_blank" style="color: var(--teal);">Смотреть</a>
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
+                            </td>
+                            <td>
+                        @if (report.Status == CleaningReportStatus.Approved)
+                        {
+                            <span style="color: #27ae60;">@report.Status.GetDisplayName()</span>
+                        }
+                        else
+                        {
+                            <span style="color: #f39c12;">@report.Status.GetDisplayName()</span>
+                        }
+                            </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}

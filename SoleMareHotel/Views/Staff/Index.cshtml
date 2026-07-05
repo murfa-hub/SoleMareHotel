@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SoleMareHotel.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Персонал";
+}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Управление персоналом</h1>
+        <div class="gold-line"></div>
+    </div>
+    <a href="/Staff/Create" class="btn-sole-mare-fill">+ Добавить сотрудника</a>
+</div>
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>ФИО</th>
+            <th>Роль</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Email</td>
+                <td>@item.FullName</td>
+                <td>
+                    @if (item.Role == "Admin")
+                    {
+                        <span style="color: #c0392b; font-weight: 600;">Администрация отеля</span>
+                    }
+                    else if (item.Role == "Receptionist")
+                    {
+                        <span style="color: #2B7A78; font-weight: 600;">Ресепшен</span>
+                    }
+                    else if (item.Role == "Housekeeper")
+                    {
+                        <span style="color: #f39c12; font-weight: 600;">Горничная</span>
+                    }
+                    else
+                    {
+                        @item.Role
+                    }
+                </td>
+                <td>
+                    <a href="/Staff/Edit/@item.Id" class="table-action">Изменить</a>
+                    <a href="/Staff/Delete/@item.Id" class="table-action-danger">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

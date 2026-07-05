@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Акт заселения";
+}
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Акт заселения</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <form method="post" class="sole-form">
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Бронь</label>
+                <select name="bookingId" required>
+                    <option value="">-- Выберите бронь --</option>
+                    @foreach (var b in ViewBag.Bookings)
+                    {
+                            <option value="@b.BookingId" data-number-of-guests="@b.NumberOfGuests">@b.BookingNumber — @b.Guest?.FullName — Номер @b.Room?.RoomNumber</option>
+                    }
+                </select>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Дата заезда</label>
+                <input name="checkInDate" type="date" required value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Время заезда</label>
+                <input name="checkInTime" type="time" required value="@DateTime.Now.ToString("HH:mm")" />
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Количество гостей</label>
+                <input name="numberOfGuests" type="number" required min="1" value="1" />
+            </div>
+            <button type="submit" class="btn-sole-mare-fill" style="width: 100%;">СОЗДАТЬ АКТ</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.querySelector('select[name="bookingId"]').addEventListener('change', function () {
+        var selected = this.options[this.selectedIndex];
+        var guests = selected.getAttribute('data-number-of-guests');
+        if (guests) {
+            document.querySelector('input[name="numberOfGuests"]').value = guests;
+        }
+    });
+</script>

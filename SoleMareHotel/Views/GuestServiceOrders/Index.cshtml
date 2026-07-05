@@ -1,0 +1,57 @@
+﻿@model IEnumerable<SoleMareHotel.Models.GuestServiceOrder>
+
+@{
+    ViewData["Title"] = "Услуги бронирования";
+    var booking = ViewBag.Booking as SoleMareHotel.Models.Booking;
+}
+
+<div style="margin-bottom: 30px;">
+    <a href="/Bookings" style="color: var(--teal); text-decoration: none;">← Назад к бронированиям</a>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Лицевой счёт: @booking?.BookingNumber</h1>
+        <p style="color: #666; margin: 5px 0 0 0;">
+            Гость: @booking?.Guest?.FullName @booking?.Guest?.OrganizationName | 
+            Номер: @booking?.Room?.RoomNumber | 
+            Проживание: @booking?.CalculateTotalCost().ToString("N2") €
+        </p>
+        <div class="gold-line"></div>
+    </div>
+    <a href="/GuestServiceOrders/Create?bookingId=@ViewBag.BookingId" class="btn-sole-mare-fill">+ Добавить услугу</a>
+</div>
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Услуга</th>
+            <th>Кол-во</th>
+            <th>Цена</th>
+            <th>Сумма</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                <tr>
+                    <td>@item.OrderDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@item.Service?.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.PriceCharged.ToString("N2") €</td>
+                    <td><strong>@item.TotalPrice.ToString("N2") €</strong></td>
+                    <td>
+                        <a href="/GuestServiceOrders/Delete/@item.GuestServiceOrderId" class="table-action-danger">Удалить</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr style="background-color: var(--navy); color: white; font-weight: bold;">
+            <td colspan="4" style="text-align: right;">Итого к оплате (проживание + услуги):</td>
+            <td colspan="2"><strong>@booking?.CalculateFullCost().ToString("N2") €</strong></td>
+        </tr>
+    </tfoot>
+</table>

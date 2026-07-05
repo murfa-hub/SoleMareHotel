@@ -1,0 +1,26 @@
+@model SoleMareHotel.Models.Organization
+
+@{
+    ViewData["Title"] = "Удаление организации";
+}
+
+<div style="max-width: 500px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <a href="/Organizations" style="color: var(--teal); text-decoration: none;">← Назад к списку</a>
+        <h1 style="color: var(--navy); margin: 10px 0 0 0;">Удаление организации</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card" style="text-align: center;">
+        <p style="font-size: 1.1rem; margin-bottom: 20px;">Вы уверены, что хотите удалить организацию?</p>
+        <p style="font-size: 1.3rem; font-weight: 600; color: var(--navy); margin-bottom: 30px;">@Model.Name</p>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <form asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.OrganizationId" />
+                <button type="submit" style="background: #c0392b; color: white; padding: 12px 30px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Удалить</button>
+            </form>
+            <a href="/Organizations" class="btn-sole-mare">ОТМЕНА</a>
+        </div>
+    </div>
+</div>

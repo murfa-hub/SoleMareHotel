@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+<div style="text-align: center; padding: 80px 0 60px 0;">
+    <h1 style="font-size: 3.5rem; color: var(--navy); margin-bottom: 0; font-family: 'Playfair Display', serif;">
+        Добро пожаловать в
+    </h1>
+    <h1 style="font-size: 4.5rem; color: var(--gold); margin-top: 0; font-family: 'Playfair Display', serif;">
+        SOLE MARE
+    </h1>
+    <div class="gold-line" style="margin: 20px auto;"></div>
+    <p style="font-size: 1.2rem; color: #666; max-width: 600px; margin: 30px auto; line-height: 1.8;">
+        Роскошный отель на побережье. Изысканный отдых, безупречный сервис и атмосфера уюта ждут вас.
+    </p>
+</div>
+
+<div style="position: relative; max-width: 1000px; margin: 0 auto 60px auto; overflow: hidden; border-top: 5px solid var(--gold);">
+    <div id="slider" style="display: flex; transition: transform 0.5s ease-in-out;">
+        <div style="min-width: 100%; height: 450px; background-image: url('/images/hotel1.jpg'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center;">
+            <div style="background: rgba(0,0,0,0.4); padding: 30px 50px; text-align: center;">
+                <h2 style="color: white; font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0;">Вид на море</h2>
+                <p style="color: #ddd; margin-top: 10px;">Панорамный вид на побережье</p>
+            </div>
+        </div>
+        <div style="min-width: 100%; height: 450px; background-image: url('/images/hotel2.jpg'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center;">
+            <div style="background: rgba(0,0,0,0.4); padding: 30px 50px; text-align: center;">
+                <h2 style="color: white; font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0;">Ресторан</h2>
+                <p style="color: #ddd; margin-top: 10px;">Авторская кухня от шеф-повара</p>
+            </div>
+        </div>
+        <div style="min-width: 100%; height: 450px; background-image: url('/images/hotel3.jpg'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center;">
+            <div style="background: rgba(0,0,0,0.4); padding: 30px 50px; text-align: center;">
+                <h2 style="color: white; font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0;">Спа-центр</h2>
+                <p style="color: #ddd; margin-top: 10px;">Расслабляющие процедуры и массаж</p>
+            </div>
+        </div>
+        <div style="min-width: 100%; height: 450px; background-image: url('/images/hotel4.jpg'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center;">
+            <div style="background: rgba(0,0,0,0.4); padding: 30px 50px; text-align: center;">
+                <h2 style="color: white; font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0;">Бассейн</h2>
+                <p style="color: #ddd; margin-top: 10px;">Открытый бассейн с подогревом</p>
+            </div>
+        </div>
+        <div style="min-width: 100%; height: 450px; background-image: url('/images/hotel5.jpg'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center;">
+            <div style="background: rgba(0,0,0,0.4); padding: 30px 50px; text-align: center;">
+                <h2 style="color: white; font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0;">Лобби</h2>
+                <p style="color: #ddd; margin-top: 10px;">Роскошный интерьер и безупречный сервис</p>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="prevSlide()" class="slider-btn" style="left: 10px;">&#10094;</button>
+    <button onclick="nextSlide()" class="slider-btn" style="right: 10px;">&#10095;</button>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <span class="dot" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+        <span class="dot" onclick="goToSlide(3)"></span>
+        <span class="dot" onclick="goToSlide(4)"></span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 60px;">
+    <div class="sole-card" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 15px;">150+</div>
+        <h3 style="color: var(--navy); margin: 0 0 10px 0;">Номеров</h3>
+        <p style="color: #666;">От уютных стандартов до роскошных президентских апартаментов с видом на море</p>
+    </div>
+    <div class="sole-card" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 15px;">24/7</div>
+        <h3 style="color: var(--navy); margin: 0 0 10px 0;">Рестораны и бары</h3>
+        <p style="color: #666;">Авторская кухня, винная карта, room-service круглосуточно</p>
+    </div>
+    <div class="sole-card" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 15px;">SPA</div>
+        <h3 style="color: var(--navy); margin: 0 0 10px 0;">Спа и оздоровление</h3>
+        <p style="color: #666;">Сауна, массаж, фитнес-центр, бассейн с подогревом</p>
+    </div>
+    <div class="sole-card" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 15px;">VIP</div>
+        <h3 style="color: var(--navy); margin: 0 0 10px 0;">Трансфер и экскурсии</h3>
+        <p style="color: #666;">Встреча в аэропорту, аренда авто, индивидуальные туры</p>
+    </div>
+</div>
+
+<div style="text-align: center; padding: 60px 0; background-color: #f8f6f0; margin: 0 -20px;">
+    <h2 style="color: var(--navy); font-family: 'Playfair Display', serif; font-size: 2rem;">Готовы к незабываемому отдыху?</h2>
+    <div class="gold-line" style="margin: 15px auto;"></div>
+    <p style="color: #666; max-width: 500px; margin: 20px auto;">Выберите идеальный номер для вашего путешествия</p>
+    <a href="/Rooms/Catalog" class="btn-sole-mare-fill">ПОСМОТРЕТЬ НОМЕРА</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 60px; padding-bottom: 40px;">
+    <div>
+        <h3 style="color: var(--navy); font-family: 'Playfair Display', serif;">Контакты</h3>
+        <div class="gold-line"></div>
+        <p style="color: #666; margin-top: 15px;">Набережная, д. 1, Курортный район</p>
+        <p style="color: #666;">+375 (17) 00 123-45-67</p>
+        <p style="color: #666;">info@solemare.com</p>
+    </div>
+    <div>
+        <h3 style="color: var(--navy); font-family: 'Playfair Display', serif;">Часы работы ресепшена</h3>
+        <div class="gold-line"></div>
+        <p style="color: #666; margin-top: 15px;">Круглосуточно, без выходных</p>
+        <p style="color: #666;">Заселение: с 14:00</p>
+        <p style="color: #666;">Выезд: до 12:00</p>
+    </div>
+    <div>
+        <h3 style="color: var(--navy); font-family: 'Playfair Display', serif;">Удобства</h3>
+        <div class="gold-line"></div>
+        <p style="color: #666; margin-top: 15px;">Бесплатный Wi-Fi</p>
+        <p style="color: #666;">Парковка</p>
+        <p style="color: #666;">Кондиционирование</p>
+        <p style="color: #666;">Обслуживание номеров</p>
+    </div>
+</div>
+
+<script>
+    var currentSlide = 0;
+    var totalSlides = 5;
+    function showSlide(index) {
+        document.getElementById('slider').style.transform = 'translateX(-' + (index * 100) + '%)';
+        document.querySelectorAll('.dot').forEach(function(dot, i) { dot.style.background = i === index ? 'var(--gold)' : '#ccc'; });
+    }
+    function nextSlide() { currentSlide = (currentSlide + 1) % totalSlides; showSlide(currentSlide); }
+    function prevSlide() { currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; showSlide(currentSlide); }
+    function goToSlide(index) { currentSlide = index; showSlide(currentSlide); }
+    setInterval(nextSlide, 4000);
+    showSlide(0);
+</script>

@@ -1,0 +1,29 @@
+﻿@model SoleMareHotel.Models.RoomCategory
+
+@{
+    ViewData["Title"] = "Добавить категорию";
+}
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Новая категория</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        <form asp-action="Create" class="sole-form">
+            <div class="form-group">
+                <label class="form-label">Название</label>
+                <input asp-for="Name" required placeholder="Например: Стандарт" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Описание</label>
+                <textarea asp-for="Description" rows="3" placeholder="Опишите категорию..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-sole-mare-fill">СОХРАНИТЬ</button>
+                <a href="/RoomCategories" class="btn-sole-mare">ОТМЕНА</a>
+            </div>
+        </form>
+    </div>
+</div>

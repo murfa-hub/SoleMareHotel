@@ -1,0 +1,48 @@
+﻿@model IEnumerable<SoleMareHotel.Models.Act>
+
+@{
+    ViewData["Title"] = "Акты";
+}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Акты</h1>
+        <div class="gold-line"></div>
+    </div>
+    <div style="display: flex; gap: 15px;">
+        <a href="/Acts/CreateCheckIn" class="btn-sole-mare-fill">+ АКТ ЗАСЕЛЕНИЯ</a>
+    </div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+        <div style="background-color: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-left: 4px solid #155724;">@TempData["Message"]</div>
+}
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>№ акта</th>
+            <th>Тип</th>
+            <th>Гость</th>
+            <th>Номер</th>
+            <th>Дата</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                <tr>
+                    <td>@item.ActNumber</td>
+                    <td>@item.ActType</td>
+                    <td>@item.Guest?.FullName</td>
+                    <td>@item.Room?.RoomNumber</td>
+                    <td>@item.CreatedDate.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        <a href="/Acts/ExportWord/@item.ActId" class="table-action-teal">📄 Скачать</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>

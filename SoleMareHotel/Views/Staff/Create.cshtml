@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Добавить сотрудника";
+}
+
+<div style="max-width: 500px; margin: 0 auto;">
+    <div style="margin-bottom: 30px;">
+        <h1 style="color: var(--navy); margin: 0;">Новый сотрудник</h1>
+        <div class="gold-line"></div>
+    </div>
+
+    <div class="sole-card">
+        @if (ViewBag.Error != null)
+        {
+            <div class="message-error">@ViewBag.Error</div>
+        }
+
+        <form method="post" class="sole-form">
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input name="email" type="email" required />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Пароль</label>
+                <input name="password" type="password" required />
+            </div>
+            <div class="form-group">
+                <label class="form-label">ФИО</label>
+                <input name="fullName" required />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Роль</label>
+                <select name="role">
+                    <option value="">-- Выберите --</option>
+                    @foreach (var role in ViewBag.Roles)
+                    {
+                        <option value="@role.Name">
+                            @if (role.Name == "Admin") { <text>Администрация отеля</text> }
+                            else if (role.Name == "Receptionist") { <text>Ресепшен</text> }
+                            else if (role.Name == "Housekeeper") { <text>Горничная</text> }
+                            else { <text>@role.Name</text> }
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="form-actions-fill">
+                <button type="submit" class="btn-sole-mare-fill">СОХРАНИТЬ</button>
+            </div>
+        </form>
+    </div>
+</div>

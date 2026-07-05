@@ -1,0 +1,63 @@
+﻿@model IEnumerable<SoleMareHotel.Models.ActivityLog>
+
+@{
+    ViewData["Title"] = "История изменений";
+}
+
+<div style="margin-bottom: 20px;">
+    <a href="/Reports" style="color: var(--teal); text-decoration: none;">← Назад к отчётам</a>
+</div>
+
+<div style="margin-bottom: 30px;">
+    <h1 style="color: var(--navy); margin: 0;">История изменений</h1>
+    <p style="color: #666;">Последние 200 действий в системе</p>
+    <div class="gold-line"></div>
+</div>
+
+@if (!Model.Any())
+{
+        <div class="sole-card" style="text-align: center; padding: 40px;">
+            <p style="color: #666; font-size: 1.1rem;">Пока нет записей в истории.</p>
+        </div>
+}
+else
+{
+        <table class="sole-table">
+            <thead>
+                <tr>
+                    <th>Дата и время</th>
+                    <th>Пользователь</th>
+                    <th>Действие</th>
+                    <th>Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var log in Model)
+            {
+                        <tr>
+                            <td style="white-space: nowrap;">@log.Timestamp.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@log.UserName</td>
+                            <td>
+                        @if (log.Action.Contains("Заселение") || log.Action.Contains("Подтверждение") || log.Action.Contains("Создание"))
+                        {
+                                        <span style="color: #27ae60; font-weight: 600;">@log.Action</span>
+                        }
+                        else if (log.Action.Contains("Выселение") || log.Action.Contains("Изменение"))
+                        {
+                                        <span style="color: #2B7A78; font-weight: 600;">@log.Action</span>
+                        }
+                        else if (log.Action.Contains("Отклон") || log.Action.Contains("Удаление") || log.Action.Contains("Отмена"))
+                        {
+                                        <span style="color: #c0392b; font-weight: 600;">@log.Action</span>
+                        }
+                        else
+                        {
+                                        <span style="color: var(--navy); font-weight: 600;">@log.Action</span>
+                        }
+                            </td>
+                            <td>@log.Description</td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+}

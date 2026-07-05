@@ -1,0 +1,122 @@
+﻿@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<div style="max-width: 500px; margin: 50px auto;">
+    <div class="sole-card">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="color: var(--navy); font-family: 'Playfair Display', serif; margin: 0;">SOLE MARE</h2>
+            <div class="gold-line" style="margin: 10px auto;"></div>
+            <p style="color: #666;">Регистрация нового гостя</p>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+                <div class="message-error">@ViewBag.Error</div>
+        }
+
+        <form method="post" class="sole-form">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="form-label">Email <span style="color: #c0392b;">*</span></label>
+                <input name="email" type="email" required placeholder="your@email.com" />
+            </div>
+
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <div>
+                    <label class="form-label">Фамилия <span style="color: #c0392b;">*</span></label>
+                    <input name="lastName" required placeholder="Иванов" />
+                </div>
+                <div>
+                    <label class="form-label">Имя <span style="color: #c0392b;">*</span></label>
+                    <input name="firstName" required placeholder="Иван" />
+                </div>
+                <div>
+                    <label class="form-label">Отчество</label>
+                    <input name="middleName" placeholder="Иванович" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Телефон</label>
+                <input name="phone" placeholder="+375 (29) 00 123-45-67" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Дата рождения</label>
+                <input name="birthDate" type="date" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Пароль <span style="color: #c0392b;">*</span></label>
+                <div class="pwd-input-wrap">
+                    <input id="regPassword" name="password" type="password" required placeholder="Введите пароль" oninput="checkPasswordStrength(this.value)" />
+                    <button type="button" class="pwd-toggle" onclick="togglePassword('regPassword', this)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+                <div style="margin-top: 8px; padding: 10px 12px; background: #f8f6f0; border-radius: 4px; font-size: 0.82rem; color: #555; line-height: 1.7;">
+                    <div style="font-weight: 600; margin-bottom: 4px; color: var(--navy);">Требования к паролю:</div>
+                    <div id="pwd-len" style="color: #999;">&#10003; Минимум 8 символов</div>
+                    <div id="pwd-lower" style="color: #999;">&#10003; Строчная буква (a-z)</div>
+                    <div id="pwd-upper" style="color: #999;">&#10003; Заглавная буква (A-Z)</div>
+                    <div id="pwd-digit" style="color: #999;">&#10003; Цифра (0-9)</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Подтверждение пароля <span style="color: #c0392b;">*</span></label>
+                <div class="pwd-input-wrap">
+                    <input id="regConfirm" name="confirmPassword" type="password" required placeholder="Повторите пароль" oninput="checkConfirmMatch()" />
+                    <button type="button" class="pwd-toggle" onclick="togglePassword('regConfirm', this)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+                <div id="confirmMatch" style="margin-top: 5px; font-size: 0.82rem; display: none;"></div>
+            </div>
+
+            <button type="submit" class="btn-sole-mare-fill" style="width: 100%;">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 15px;">
+            <p style="color: #666;">Уже есть аккаунт? <a href="/Account/Login" style="color: var(--gold);">Войти</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function togglePassword(fieldId, btn) {
+        var field = document.getElementById(fieldId);
+        if (field.type === 'password') {
+            field.type = 'text';
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+        } else {
+            field.type = 'password';
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+        }
+    }
+
+    function checkPasswordStrength(pwd) {
+        var ok = '#27ae60', fail = '#999';
+        document.getElementById('pwd-len').style.color = pwd.length >= 8 ? ok : fail;
+        document.getElementById('pwd-lower').style.color = /[a-zа-яё]/.test(pwd) ? ok : fail;
+        document.getElementById('pwd-upper').style.color = /[A-ZА-ЯЁ]/.test(pwd) ? ok : fail;
+        document.getElementById('pwd-digit').style.color = /\d/.test(pwd) ? ok : fail;
+        checkConfirmMatch();
+    }
+
+    function checkConfirmMatch() {
+        var pwd = document.getElementById('regPassword').value;
+        var confirm = document.getElementById('regConfirm').value;
+        var el = document.getElementById('confirmMatch');
+        if (confirm.length === 0) { el.style.display = 'none'; return; }
+        el.style.display = 'block';
+        if (pwd === confirm) {
+            el.style.color = '#27ae60';
+            el.innerHTML = '&#10003; Пароли совпадают';
+        } else {
+            el.style.color = '#c0392b';
+            el.innerHTML = '&#10007; Пароли не совпадают';
+        }
+    }
+</script>

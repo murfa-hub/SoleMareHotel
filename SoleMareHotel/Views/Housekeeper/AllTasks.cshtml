@@ -1,0 +1,45 @@
+﻿@model IEnumerable<SoleMareHotel.Models.CleaningTask>
+@using SoleMareHotel.Models
+
+@{
+    ViewData["Title"] = "Все задания на уборку";
+}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div>
+        <h1 style="color: var(--navy); margin: 0;">Задания на уборку</h1>
+        <div class="gold-line"></div>
+    </div>
+    <a href="/Housekeeper/CreateTask" class="btn-sole-mare-fill">+ Создать задание</a>
+</div>
+
+@if (TempData["Message"] != null)
+{
+        <div class="message-success">@TempData["Message"]</div>
+}
+
+<table class="sole-table">
+    <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Тип</th>
+            <th>Статус</th>
+            <th>Горничная</th>
+            <th>Создано</th>
+            <th>Результат</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+                <tr>
+                    <td>@task.Room?.RoomNumber</td>
+                    <td>@task.CleaningType.GetDisplayName()</td>
+                    <td>@task.Status.GetDisplayName()</td>
+                    <td>@task.AssignedTo</td>
+                    <td>@task.CreatedAt.ToString("dd.MM.yyyy")</td>
+                    <td>@(task.Result?.GetDisplayName() ?? "—")</td>
+                </tr>
+        }
+    </tbody>
+</table>
